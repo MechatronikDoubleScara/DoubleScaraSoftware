@@ -1,14 +1,14 @@
 #include <Endeffector.h>
 
-Endeffector::Endeffector()
+Endeffector::Endeffector(const int Pin = PIN_ENDEFFECTOR): magnetPin(Pin)
 {
-  pinMode(Pin, OUTPUT);
+  pinMode(magnetPin, OUTPUT);
 }
 
 void Endeffector::init()
 {
   State = false;
-  digitalWrite(Pin, LOW);
+  digitalWrite(magnetPin, LOW);
   return;
 }
 
@@ -16,11 +16,11 @@ int Endeffector::setState(bool state)
 {
   if(state == true)
   {
-    digitalWrite(Pin, HIGH);
+    digitalWrite(magnetPin, HIGH);
   }
   else if(state == false)
   {
-    digitalWrite(Pin, LOW);
+    digitalWrite(magnetPin, LOW);
   }
   else
   {
@@ -33,7 +33,7 @@ int Endeffector::setPWM(int PwmValue)
 {
   if((PwmValue > 0) || (PwmValue < 255))
   {
-    analogWrite(Pin, PwmValue);
+    analogWrite(magnetPin, PwmValue);
   }
   else
   {

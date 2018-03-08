@@ -7,13 +7,13 @@
 class Endeffector
 {
   public:
-    Endeffector();
+    Endeffector(const int Pin = PIN_ENDEFFECTOR);
     void init();
     int setState(bool state);
     int setPWM(int PwmValue);
 
   private:
-    int Pin = PIN_Magnet;
+    const int magnetPin;
     bool State = false;
     int PwmValue = 0;
 };

@@ -22,7 +22,11 @@
 #define LINK1_LENGTH 66.7
 #define LINK2_LENGTH 105.2
 
-#define Z_GEAR_DIAMETER 00
+#define ZGEAR_DIAMETER 15
+#define Z_MAXLIFT 21
+
+//#define ZAXIS_LIMIT_DOWN 100
+//#define ZAXIS_LIMIT_UP 100
 
 
 //===========================================================================
@@ -35,6 +39,7 @@
 //============================ Electrical Settings ==========================
 //===========================================================================
 
-#define PIN_Magnet 6
+#define PIN_ENDEFFECTOR 6
+#define PIN_ZAXIS_SERVO 9
 
 #endif
