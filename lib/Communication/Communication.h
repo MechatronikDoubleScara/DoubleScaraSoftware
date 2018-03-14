@@ -28,16 +28,23 @@ private:
   String recievedData; // contains the whole string of recieved data from bluetooth connection
   String temp; // contains the temporary sub messages that were split up
   String data[MAX_STRING_ENTRIES] = {}; // contains the split data messages
+
+  // mode
   int mode;
+
   // Variables for mode 1
   double X;
   double Y;
   double Z;
   int magnet;
+
   // Variables for mode 2
+  int shape;
 
   // Variables for mode 3
-
+  int player;
+  int row;
+  int col;
 
 };
 

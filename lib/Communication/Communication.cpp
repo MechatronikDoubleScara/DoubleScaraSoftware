@@ -112,13 +112,24 @@ void Communication::recieve()
     else if(mode == 2)
     {
       // EXTRACT FROM MESSAGE FOR MODE 2
-      Serial.println(data[1]);
-      Serial.println(data[2]);
-      Serial.println(data[3]);
+      shape   = data[1].toInt();
+
+      Serial.print("Shape: ");
+      Serial.println(shape);
     }
     else if(mode == 3)
     {
       // EXTRACT FROM MESSAGE FOR MODE 3
+      player  = data[1].toInt();
+      row     = data[2].toInt();
+      col     = data[3].toInt();
+
+      Serial.print("Player: ");
+      Serial.println(player);
+      Serial.print("Row: ");
+      Serial.println(row);
+      Serial.print("Col: ");
+      Serial.println(col);
     }
     else
     {

@@ -26,23 +26,25 @@ void loop() {
   if (Kommunikation->getMode() == 1)
   {
     // CODE OF MODE 1
-    Kommunikation->print("#OK, YEAHHH~");
-    delay(10);
     Serial.println("I'm in Mode 1");
-
-
-
+    delay(5000);
+    Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
   }
   else if (Kommunikation->getMode() == 2)
   {
     // CODE OF MODE 2
-    Kommunikation->print("#YEEAH~");
-    delay(10);
     Serial.println("I'm in Mode 2");
-
-
-
+    delay(5000);
+    Kommunikation->print("#OK~");
+    Kommunikation->resetRecievedData();
+  }
+  else if (Kommunikation->getMode() == 3)
+  {
+    // CODE OF MODE 2
+    Serial.println("I'm in Mode 3");
+    delay(5000);
+    Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
   }
 
