@@ -1,6 +1,6 @@
 #include <ZAxis.h>
 
-ZAxis::ZAxis(const int Pin = PIN_ZAXIS_SERVO, int speed = 50): servoPin(Pin), zSpeed(speed)
+ZAxis::ZAxis(const int Pin = PIN_ZAXIS_SERVO, int speed = Z_SERVO_SPEED): servoPin(Pin), zSpeed(speed)
 {
   zServo.attach(servoPin);
 }

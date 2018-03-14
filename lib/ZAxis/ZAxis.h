@@ -8,7 +8,7 @@
 class ZAxis
 {
   public:
-    ZAxis(const int Pin = PIN_ZAXIS_SERVO, int speed = 50);
+    ZAxis(const int Pin = PIN_ZAXIS_SERVO, int speed = Z_SERVO_SPEED);
     void init();
     int movePosition(float position);
     void moveUp();
