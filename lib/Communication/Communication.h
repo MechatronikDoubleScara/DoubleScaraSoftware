@@ -20,6 +20,7 @@ public:
 
   int getMode();
   double getCoordinate(char axis);
+  int getActivity();
 
 
 private:
@@ -32,16 +33,19 @@ private:
   // mode
   int mode;
 
-  // Variables for mode 1
+  // Variables for mode 0 (clear Plate)
+  int activity;
+
+  // Variables for mode 1 (manual Mode)
   double X;
   double Y;
   double Z;
   int magnet;
 
-  // Variables for mode 2
+  // Variables for mode 2 (Shapes)
   int shape;
 
-  // Variables for mode 3
+  // Variables for mode 3 (TicTacToe)
   int player;
   int row;
   int col;

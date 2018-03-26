@@ -6,8 +6,8 @@
 //===========================================================================
 
 #define BASE_LENGTH 82
-#define LINK1_LENGTH 66.7
-#define LINK2_LENGTH 105.2
+#define LINK1_LENGTH 72.1 // 66.7 oder 72.1
+#define LINK2_LENGTH 113.1 // 105.2 oder 113.1
 
 #define ZGEAR_DIAMETER 15
 #define Z_MAXLIFT 21
