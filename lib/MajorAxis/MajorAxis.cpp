@@ -1,5 +1,8 @@
 #include <MajorAxis.h>
 
+
+
+
 void MajorAxis::init()
 {
   LengthLeft = 0;
@@ -52,51 +55,89 @@ int MajorAxis::calculateAngles(double X, double Y)
   {
     Serial.println("Calculate angles for top area");
 
-    LengthLeft = sqrt((BASE_LENGTH/2 + X)*(BASE_LENGTH/2 + X) + Y*Y);
-    LengthRight = sqrt((BASE_LENGTH/2 - X)*(BASE_LENGTH/2 - X) + Y*Y);
+    LengthLeft  = sqrt(pow(BASE_LENGTH/2 + X, 2) + pow(Y,2));
+    LengthRight = sqrt(pow(BASE_LENGTH/2 - X, 2) + pow(Y,2));
 
-    alpha2 = atan2(Y, BASE_LENGTH/2 + X);
-    alpha1 = acos((LINK1_LENGTH*LINK1_LENGTH + LengthLeft*LengthLeft - LINK2_LENGTH*LINK2_LENGTH) / (2*LINK1_LENGTH*LengthLeft));
-    PHI1 = alpha1 + alpha2;
-    PHI1d = PHI1 * 360/(2*PI);
+    alpha2      = atan2(Y, BASE_LENGTH/2 + X);
+    alpha1      = acos((pow(LINK1_LENGTH, 2) + pow(LengthLeft, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthLeft));
+    PHI1        = alpha1 + alpha2;
+    PHI1d       = PHI1 * 360/(2*PI);
 
-    beta2 = atan2(Y, BASE_LENGTH/2 - X);
-    beta1 = acos((LINK1_LENGTH*LINK1_LENGTH + LengthRight*LengthRight - LINK2_LENGTH*LINK2_LENGTH) / (2*LINK1_LENGTH*LengthRight));
-    PHI4 = PI - beta2 - beta1;
-    PHI4d = PHI4 * 360/(2*PI);
+    beta2       = atan2(Y, BASE_LENGTH/2 - X);
+    beta1       = acos((pow(LINK1_LENGTH, 2) + pow(LengthRight, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthRight));
+    PHI4        = PI - beta2 - beta1;
+    PHI4d       = PHI4 * 360/(2*PI);
   }
   else if(area == 2)
   {
     Serial.println("Calculate angles for bottom area");
 
-    LengthLeft = sqrt((BASE_LENGTH/2 + X)*(BASE_LENGTH/2 + X) + (-Y*-Y));
-    LengthRight = sqrt((BASE_LENGTH/2 - X)*(BASE_LENGTH/2 - X) + (-Y*-Y));
+    LengthLeft  = sqrt(pow(BASE_LENGTH/2 + X, 2) + pow(-Y, 2));
+    LengthRight = sqrt(pow(BASE_LENGTH/2 - X, 2) + pow(-Y, 2));
 
-    alpha2 = atan2(-Y, BASE_LENGTH/2 + X);
-    alpha1 = acos((LINK1_LENGTH*LINK1_LENGTH + LengthLeft*LengthLeft - LINK2_LENGTH*LINK2_LENGTH) / (2*LINK1_LENGTH*LengthLeft));
-    PHI1 = 2*PI - alpha1 - alpha2;
-    PHI1d = PHI1 * 360/(2*PI);
+    alpha2      = atan2(-Y, BASE_LENGTH/2 + X);
+    alpha1      = acos((pow(LINK1_LENGTH, 2) + pow(LengthLeft, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthLeft));
+    PHI1        = 2*PI - alpha1 - alpha2;
+    PHI1d       = PHI1 * 360/(2*PI);
 
-    beta2 = atan2(-Y, BASE_LENGTH/2 - X);
-    beta1 = acos((LINK1_LENGTH*LINK1_LENGTH + LengthRight*LengthRight - LINK2_LENGTH*LINK2_LENGTH) / (2*LINK1_LENGTH*LengthRight));
-    PHI4 = -(PI - beta2 - beta1); // vorher PI + beta2 + beta1
-    PHI4d = PHI4 * 360/(2*PI);
+    beta2       = atan2(-Y, BASE_LENGTH/2 - X);
+    beta1       = acos((pow(LINK1_LENGTH, 2) + pow(LengthRight, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthRight));
+    PHI4        = -(PI - beta2 - beta1); // vorher PI + beta2 + beta1
+    PHI4d       = PHI4 * 360/(2*PI);
   }
   else
   {
     return -1;
   }
-
 
   if (isnan(PHI1) || isnan(PHI4))
   {
-    return -1;
-  }
-  else
-  {
-    return 1;
+    Serial.println("Coordinate not in workspace");
+    return -1; // one angle is nan -> position out of workspace
   }
 
+
+  // Distance D with safety distance (crash between joints)
+  DSafetyDistance = 20;
+  // Calculation of D (disance between joints)
+  Ax = -BASE_LENGTH/2 + LINK1_LENGTH*cos(PHI1);
+  Ay = 0 + LINK1_LENGTH*sin(PHI1);
+  Bx = BASE_LENGTH/2 + LINK1_LENGTH*cos(PHI4);
+  By = 0 + LINK1_LENGTH*sin(PHI4);
+  D = sqrt(pow(Ax-Bx, 2) + pow(Ay-By, 2));
+
+
+  //Safety Distance from widest Z-Axis Point to avoid crashes with Motors -> 33mm + 2mm safety
+  SafetyDistanceTCP = 35;
+  //Calculate Distance TCP - Motors (Safety Area around Motors to avoid crashes of Z-Axis with Motors)
+  distanceTCP1  = sqrt(pow(X - (-BASE_LENGTH/2 - NEMA/2), 2) + pow(Y - NEMA/2, 2)); // Top Left
+  distanceTCP2  = sqrt(pow(X - (+BASE_LENGTH/2 + NEMA/2), 2) + pow(Y - NEMA/2, 2)); // Top Right
+  distanceTCP3  = sqrt(pow(X - (-BASE_LENGTH/2 - NEMA/2), 2) + pow(Y - (-NEMA/2), 2)); // Bottom Left
+  distanceTCP4  = sqrt(pow(X - (+BASE_LENGTH/2 + NEMA/2), 2) + pow(Y - (-NEMA/2), 2)); // Bottom Right
+
+
+  if (D < DSafetyDistance)
+  {
+    Serial.println("Left Joint too near to right Joint - STOP");
+    return -2;
+  }
+  else if (X >= (-BASE_LENGTH/2 - NEMA/2) && X <= (BASE_LENGTH/2 + NEMA/2) && Y <= (NEMA/2 + SafetyDistanceTCP) && Y >= (-NEMA/2 - SafetyDistanceTCP))
+  {
+    Serial.println("TCP in saftey area - only accessable with predefined movement - STOP");
+    return -2;
+  }
+  else if (X >= (-BASE_LENGTH/2 - NEMA/2 - SafetyDistanceTCP) && X <= (BASE_LENGTH/2 + NEMA/2 + SafetyDistanceTCP) && Y <= (NEMA/2) && Y >= (-NEMA/2))
+  {
+    Serial.println("TCP in saftey area - only accessable with predefined movement - STOP");
+    return -2;
+  }
+  else if (distanceTCP1 <= SafetyDistanceTCP || distanceTCP2 <= SafetyDistanceTCP || distanceTCP3 <= SafetyDistanceTCP || distanceTCP4 <= SafetyDistanceTCP)
+  {
+    Serial.println("TCP in saftey area - only accessable with predefined movement - STOP");
+    return -2;
+  }
+
+  return 1;
 }
 
 void MajorAxis::printAngles()

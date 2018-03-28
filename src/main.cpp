@@ -48,6 +48,7 @@ void loop() {
         break;
     }
     delay(3000);
+    Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
   }
@@ -61,23 +62,28 @@ void loop() {
       Hauptachse->printAngles();
       // GEORGS CODE für Motorbewegung
       // ACCESS ANGLES with getter func -> Hauptachse->getAngle1() und Hauptachse->getAngle4()
+      delay(3000);
+      Serial.println("Send OK\n");
+      Kommunikation->print("#OK~");
+      Kommunikation->resetRecievedData();
     }
     else
     {
-      Serial.println("Coordinate not in workspace");
+      // Cordinate not in workspace
+      delay(3000);
+      Serial.println("Send OK\n");
+      Kommunikation->print("#OK~");
+      Kommunikation->resetRecievedData();
     }
 
-    delay(3000);
-    Serial.println("Send OK");
-    Kommunikation->print("#OK~");
-    Kommunikation->resetRecievedData();
+
   }
   else if (Kommunikation->getMode() == 2)
   {
     // CODE OF MODE 2
     Serial.println("I'm in Mode 2: Shapes");
     delay(3000);
-    Serial.println("Send OK");
+    Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
   }
@@ -86,7 +92,7 @@ void loop() {
     // CODE OF MODE 2
     Serial.println("I'm in Mode 3: TicTacToe");
     delay(3000);
-    Serial.println("Send OK");
+    Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
   }

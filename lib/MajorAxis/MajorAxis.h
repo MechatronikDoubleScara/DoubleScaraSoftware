@@ -13,11 +13,10 @@ public:
     init();
   }
   void init();
-  int calculateAngles(double X, double Y);
+  int calculateAngles(double X, double Y); // returns 1 if position is inside work space, -1 if outside workspace, -2 if position is in safety area
   void printAngles();
   double getAngle1();
   double getAngle4();
-
 
 
 private:
@@ -35,6 +34,23 @@ private:
   double PHI4d;
 
   int area;
+
+  // Variables for safety check
+  double DSafetyDistance;
+  double leftJoint;
+  double rightJoint;
+  double SafetyDistanceTCP;
+  double distanceTCP1;
+  double distanceTCP2;
+  double distanceTCP3;
+  double distanceTCP4;
+
+  double Ax;
+  double Ay;
+  double Bx;
+  double By;
+  double D;
+
 };
 
 
