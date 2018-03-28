@@ -79,7 +79,7 @@ int MajorAxis::calculateAngles(double X, double Y)
 
     beta2 = atan2(-Y, BASE_LENGTH/2 - X);
     beta1 = acos((LINK1_LENGTH*LINK1_LENGTH + LengthRight*LengthRight - LINK2_LENGTH*LINK2_LENGTH) / (2*LINK1_LENGTH*LengthRight));
-    PHI4 = PI + beta2 + beta1;
+    PHI4 = -(PI - beta2 - beta1); // vorher PI + beta2 + beta1
     PHI4d = PHI4 * 360/(2*PI);
   }
   else
