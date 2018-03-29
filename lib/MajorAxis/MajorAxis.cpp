@@ -15,6 +15,18 @@ void backwardstep2_MICRO() { Stepper2->onestep(BACKWARD, MICROSTEP); }
 
 MajorAxis::MajorAxis()
 {
+  LengthLeft = 0;
+  LengthRight = 0;
+  alpha1 = 0;
+  alpha2 = 0;
+  PHI1 = 0;
+  PHI1d = 0;
+  beta1 = 0;
+  beta2 = 0;
+  PHI4 = 0;
+  PHI4d = 0;
+  area = 0;
+
   //Sensor initialization
   angleSensor1 = new AS5048A(PIN_SS_SENSOR1);
   angleSensor2 = new AS5048A(PIN_SS_SENSOR2);
