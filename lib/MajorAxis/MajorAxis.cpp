@@ -61,11 +61,27 @@ int MajorAxis::calculateAngles(double X, double Y)
     alpha2      = atan2(Y, BASE_LENGTH/2 + X);
     alpha1      = acos((pow(LINK1_LENGTH, 2) + pow(LengthLeft, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthLeft));
     PHI1        = alpha1 + alpha2;
+    if(PHI1 >= 2*PI)
+    {
+      PHI1 = PHI1 - 2*PI;
+    }
+    else if (PHI1 < 0)
+    {
+      PHI1 = PHI1 + 2*PI;
+    }
     PHI1d       = PHI1 * 360/(2*PI);
 
     beta2       = atan2(Y, BASE_LENGTH/2 - X);
     beta1       = acos((pow(LINK1_LENGTH, 2) + pow(LengthRight, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthRight));
     PHI4        = PI - beta2 - beta1;
+    if(PHI4 >= 2*PI)
+    {
+      PHI4 = PHI4 - 2*PI;
+    }
+    else if (PHI4 < 0)
+    {
+      PHI4 = PHI4 + 2*PI;
+    }
     PHI4d       = PHI4 * 360/(2*PI);
   }
   else if(area == 2)
@@ -78,11 +94,28 @@ int MajorAxis::calculateAngles(double X, double Y)
     alpha2      = atan2(-Y, BASE_LENGTH/2 + X);
     alpha1      = acos((pow(LINK1_LENGTH, 2) + pow(LengthLeft, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthLeft));
     PHI1        = 2*PI - alpha1 - alpha2;
+    if(PHI1 >= 2*PI)
+    {
+      PHI1 = PHI1 - 2*PI;
+    }
+    else if (PHI1 < 0)
+    {
+      PHI1 = PHI1 + 2*PI;
+    }
     PHI1d       = PHI1 * 360/(2*PI);
 
     beta2       = atan2(-Y, BASE_LENGTH/2 - X);
     beta1       = acos((pow(LINK1_LENGTH, 2) + pow(LengthRight, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthRight));
-    PHI4        = -(PI - beta2 - beta1); // vorher PI + beta2 + beta1
+    //PHI4        = -(PI - beta2 - beta1);
+    PHI4        = PI + beta2 + beta1;
+    if(PHI4 >= 2*PI)
+    {
+      PHI4 = PHI4 - 2*PI;
+    }
+    else if (PHI4 < 0)
+    {
+      PHI4 = PHI4 + 2*PI;
+    }
     PHI4d       = PHI4 * 360/(2*PI);
   }
   else
