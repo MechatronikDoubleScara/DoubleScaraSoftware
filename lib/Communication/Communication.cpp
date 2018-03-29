@@ -89,14 +89,18 @@ void Communication::recieve()
     if(mode == 0)
     {
         // EXTRACT FROM MESSAGE FOR MODE 0
+        activity = data[1].toInt();
+
+        Serial.print("Activity: ");
+        Serial.println(activity);
     }
     else if(mode == 1)
     {
       // EXTRACT FROM MESSAGE FOR MODE 1
-      X = data[1].toDouble();
-      Y = data[2].toDouble();
-      Z = data[3].toDouble();
-      magnet = data[4].toInt();
+      X       = data[1].toDouble();
+      Y       = data[2].toDouble();
+      Z       = data[3].toDouble();
+      magnet  = data[4].toInt();
 
       Serial.print("Mode: ");
       Serial.println(mode);
@@ -165,4 +169,9 @@ double Communication::getCoordinate(char axis)
       return 0.0;
   }
 
+}
+
+int Communication::getActivity()
+{
+  return activity;
 }
