@@ -61,6 +61,8 @@ int MajorAxis::calculateAngles(double X, double Y)
     alpha2      = atan2(Y, BASE_LENGTH/2 + X);
     alpha1      = acos((pow(LINK1_LENGTH, 2) + pow(LengthLeft, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthLeft));
     PHI1        = alpha1 + alpha2;
+
+    // norm to 0 ... 360
     if(PHI1 >= 2*PI)
     {
       PHI1 = PHI1 - 2*PI;
@@ -69,11 +71,19 @@ int MajorAxis::calculateAngles(double X, double Y)
     {
       PHI1 = PHI1 + 2*PI;
     }
+
+    // scale to 0 ... 180, -180 ... 0
+    if (PHI1 > PI)
+    {
+      PHI1 = PHI1 - 2*PI;
+    }
     PHI1d       = PHI1 * 360/(2*PI);
 
     beta2       = atan2(Y, BASE_LENGTH/2 - X);
     beta1       = acos((pow(LINK1_LENGTH, 2) + pow(LengthRight, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthRight));
     PHI4        = PI - beta2 - beta1;
+
+    // norm to 0 ... 360
     if(PHI4 >= 2*PI)
     {
       PHI4 = PHI4 - 2*PI;
@@ -81,6 +91,12 @@ int MajorAxis::calculateAngles(double X, double Y)
     else if (PHI4 < 0)
     {
       PHI4 = PHI4 + 2*PI;
+    }
+
+    // scale to 0 ... 180, -180 ... 0
+    if (PHI4 > PI)
+    {
+      PHI4 = PHI4 - 2*PI;
     }
     PHI4d       = PHI4 * 360/(2*PI);
   }
@@ -94,6 +110,8 @@ int MajorAxis::calculateAngles(double X, double Y)
     alpha2      = atan2(-Y, BASE_LENGTH/2 + X);
     alpha1      = acos((pow(LINK1_LENGTH, 2) + pow(LengthLeft, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthLeft));
     PHI1        = 2*PI - alpha1 - alpha2;
+
+    // norm to 0 ... 360
     if(PHI1 >= 2*PI)
     {
       PHI1 = PHI1 - 2*PI;
@@ -102,12 +120,20 @@ int MajorAxis::calculateAngles(double X, double Y)
     {
       PHI1 = PHI1 + 2*PI;
     }
+
+    // scale to 0 ... 180, -180 ... 0
+    if (PHI1 > PI)
+    {
+      PHI1 = PHI1 - 2*PI;
+    }
     PHI1d       = PHI1 * 360/(2*PI);
 
     beta2       = atan2(-Y, BASE_LENGTH/2 - X);
     beta1       = acos((pow(LINK1_LENGTH, 2) + pow(LengthRight, 2) - pow(LINK2_LENGTH, 2)) / (2*LINK1_LENGTH*LengthRight));
     //PHI4        = -(PI - beta2 - beta1);
     PHI4        = PI + beta2 + beta1;
+
+    // norm to 0 ... 360
     if(PHI4 >= 2*PI)
     {
       PHI4 = PHI4 - 2*PI;
@@ -115,6 +141,12 @@ int MajorAxis::calculateAngles(double X, double Y)
     else if (PHI4 < 0)
     {
       PHI4 = PHI4 + 2*PI;
+    }
+
+    // scale to 0 ... 180, -180 ... 0
+    if (PHI4 > PI)
+    {
+      PHI4 = PHI4 - 2*PI;
     }
     PHI4d       = PHI4 * 360/(2*PI);
   }
