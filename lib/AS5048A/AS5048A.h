@@ -1,6 +1,7 @@
 #ifndef as5048_h
 #define as5048_h
 #define LIBRARY_VERSION 1.0.1
+#define AS5048B_RESOLUTION 16384.0 //14 bits
 
 #include <SPI.h>
 
@@ -12,11 +13,11 @@ class AS5048A{
 	byte dout;
 	byte din;
 	byte clk;
-	word position;
+	float position;
 	word transaction(word data);
-	
+
 	SPISettings settings;
-	
+
 	public:
 
 	/**
@@ -56,7 +57,7 @@ class AS5048A{
 	 *
 	 * @return {int} between -2^13 and 2^13
 	 */
-	int getRotation();
+	float getRotation();
 
 	/**
 	 * Returns the raw angle directly from the sensor
@@ -89,7 +90,7 @@ class AS5048A{
 	/*
 	 * Set the zero position
 	 */
-	void setZeroPosition(word arg_position);
+	void setZeroPosition(float arg_position);
 
 	/*
 	 * Returns the current zero position

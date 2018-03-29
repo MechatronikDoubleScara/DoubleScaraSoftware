@@ -29,7 +29,7 @@ AS5048A::AS5048A(byte arg_cs){
 void AS5048A::init(){
 	// 1MHz clock (AMS should be able to accept up to 10MHz)
 	settings = SPISettings(1000000, MSBFIRST, SPI_MODE1);
-	
+
 	//setup pins
 	pinMode(_cs, OUTPUT);
 
@@ -70,14 +70,15 @@ byte AS5048A::spiCalcEvenParity(word value){
  *
  * @return {int} between -2^13 and 2^13
  */
-int AS5048A::getRotation(){
+float AS5048A::getRotation(){
 	word data;
-	int rotation;
+	float rotation;
+	float angleConv;
 
 	data = AS5048A::getRawRotation();
-	rotation = (int)data - (int)position;
-	if(rotation > 8191) rotation = -((0x3FFF)-rotation); //more than -180
-	//if(rotation < -0x1FFF) rotation = rotation+0x3FFF;
+	angleConv = ((float)data / AS5048B_RESOLUTION) * 360.0;
+	rotation = (float)angleConv - (float)position;
+	if(rotation > 180) rotation = -((360)-rotation);
 
 	return rotation;
 }
@@ -129,8 +130,8 @@ word AS5048A::getErrors(){
 /*
  * Set the zero position
  */
-void AS5048A::setZeroPosition(word arg_position){
-	position = arg_position % 0x3FFF;
+void AS5048A::setZeroPosition(float arg_position){
+	position = arg_position;
 }
 
 /*
@@ -245,7 +246,7 @@ word AS5048A::write(word registerAddress, word data) {
 	SPI.transfer(left_byte);
 	SPI.transfer(right_byte);
 	digitalWrite(_cs,HIGH);
-	
+
 	word dataToSend = 0b0000000000000000;
 	dataToSend |= data;
 
@@ -264,7 +265,7 @@ word AS5048A::write(word registerAddress, word data) {
 	SPI.transfer(left_byte);
 	SPI.transfer(right_byte);
 	digitalWrite(_cs,HIGH);
-	
+
 	//Send a NOP to get the new data in the register
 	digitalWrite(_cs, LOW);
 	left_byte =-SPI.transfer(0x00);
