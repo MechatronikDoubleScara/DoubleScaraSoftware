@@ -15,8 +15,9 @@ class MajorAxis
     MajorAxis();
     void init();
     void setZeroPositionLinks(float offset1, float offset2);
-    void moveLinksSingleStep(int steps1, int steps2);
-    void moveLinksMicroStep(int steps1, int steps2);
+    int movePosition(float X, float Y);
+
+    void get();
 
     int calculateAngles(double X, double Y); // returns 1 if position is inside work space, -1 if outside workspace, -2 if position is in safety area
     void printAngles();
@@ -24,6 +25,11 @@ class MajorAxis
     double getAngle4();
 
   private:
+    double calculateToGoAngle(double targetAngle, int motoridx);
+    void moveLinksSingleStep(int steps1, int steps2);
+    void moveLinksMicroStep(int steps1, int steps2);
+    void moveToAngle(double alpha, double beta);
+
     AS5048A *angleSensor1;
     AS5048A *angleSensor2;
     float sensor_offset1, sensor_offset2;
@@ -48,6 +54,10 @@ class MajorAxis
     double PHI4d;
 
     int area;
+    int currentArea;
+
+    double currentPosX;
+    double currentPosY;
 
     // Variables for safety check
     double DSafetyDistance;

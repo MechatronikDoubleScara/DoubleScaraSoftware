@@ -62,19 +62,97 @@ MajorAxis::MajorAxis()
   stepper2_Micro->setAcceleration(STEPPER_ACCELERATION);
 }
 
+void MajorAxis::get()
+{
+  Serial.println(angleSensor1->getRotation());
+}
+
 void MajorAxis::init()
 {
-  float currentP1, currentP2;
+  //float currentP1, currentP2;
 
-  currentP1 = angleSensor1->getRotation();
-  currentP2 = angleSensor2->getRotation();
+  //currentP1 = angleSensor1->getRotation();
+  //currentP2 = angleSensor2->getRotation();
 
-  if((currentP1 < 180) && (currentP1 > 0))// && (currentP2 < 180) && (currentP2 > 0))
-    moveLinksSingleStep((180.0 - currentP1 - INIT_ANGLE_LINK)/(360.0/NUMBER_SINGLE_STEPS), (currentP2 - INIT_ANGLE_LINK)/(360.0/NUMBER_SINGLE_STEPS));
-  else if((currentP1 < 0) )//&& (currentP2 < 0))
-    moveLinksSingleStep(( - (currentP1 + (180 - INIT_ANGLE_LINK)))/(360.0/NUMBER_SINGLE_STEPS), ( - (currentP2 + INIT_ANGLE_LINK))/(360.0/NUMBER_SINGLE_STEPS));
+  /*
+  if((currentP1 < 180) && (currentP1 > 0) &&(currentP2 < 180) && (currentP2 > 0))
+    moveLinksSingleStep((180.0 - currentP1 - INIT_ANGLE_LINK)/(360.0/NUMBER_SINGLE_STEPS), (INIT_ANGLE_LINK - currentP2)/(360.0/NUMBER_SINGLE_STEPS));
+  else if((currentP2 < 0) && (currentP1 < 0))
+    moveLinksSingleStep(( - (currentP1 + (180 - INIT_ANGLE_LINK)))/(360.0/NUMBER_SINGLE_STEPS), ( - (INIT_ANGLE_LINK + currentP2))/(360.0/NUMBER_SINGLE_STEPS));
+*/
+  moveToAngle(150, 30);
 
-  //Serial.println(angleSensor1->getRotation());
+  currentArea = 1;
+  currentPosX = 999;
+  currentPosY = 999;
+}
+
+int MajorAxis::movePosition(float X, float Y)
+{
+  if(calculateAngles(X, Y) < 0)
+    return -1;
+
+  if(currentArea != area)
+  {
+    if(currentArea == 1)
+    {
+      moveToAngle(150, 30);
+      delay(100);
+      moveToAngle(-150, -30);
+    }
+    else if(currentArea == 2)
+    {
+      moveToAngle(-150, -30);
+      delay(100);
+      moveToAngle(150, 30);
+    }
+  }
+
+  moveToAngle(PHI1d, PHI4d);
+
+  currentArea = area;
+  currentPosX = X;
+  currentPosY = Y;
+
+  return 0;
+}
+
+void MajorAxis::moveToAngle(double alpha, double beta)
+{
+  double a1, a2;
+
+  a1 = calculateToGoAngle(alpha, 1);
+  a2 = calculateToGoAngle(beta, 2);
+  moveLinksSingleStep(a1/(360.0/NUMBER_SINGLE_STEPS), a2/(360.0/NUMBER_SINGLE_STEPS));
+
+  //a1 = calculateToGoAngle(alpha, 1);
+  //a2 = calculateToGoAngle(beta, 2);
+  //moveLinksMicroStep(a1/(360.0/NUMBER_MICRO_STEPS), a2/(360.0/NUMBER_MICRO_STEPS));
+}
+
+double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
+{
+  double toGoAngle;
+  double currentAngle;
+  if(motoridx == 1)
+  {
+    currentAngle = angleSensor1->getRotation();
+
+    if(((targetAngle > 0) && (currentAngle > 0)) || ((targetAngle < 0) && (currentAngle < 0)))
+      toGoAngle = targetAngle - currentAngle;
+    else if((targetAngle < 0) && (currentAngle > 0))
+      toGoAngle = 360.0 - currentAngle + targetAngle;
+    else if((targetAngle > 0) && (currentAngle < 0))
+      toGoAngle = - currentAngle + targetAngle - 360.0;
+  }
+  else if(motoridx == 2)
+  {
+    currentAngle = angleSensor2->getRotation();
+
+    toGoAngle = targetAngle - currentAngle;
+  }
+
+  return toGoAngle;
 }
 
 void MajorAxis::moveLinksSingleStep(int steps1, int steps2)
@@ -254,7 +332,6 @@ int MajorAxis::calculateAngles(double X, double Y)
     Serial.println("Coordinate not in workspace");
     return -1; // one angle is nan -> position out of workspace
   }
-
 
   // Distance D with safety distance (crash between joints)
   DSafetyDistance = 20;
