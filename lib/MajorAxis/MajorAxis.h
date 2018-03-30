@@ -50,6 +50,9 @@ class MajorAxis
     int area;
 
     // Variables for safety check
+    double motorSafetyDistance;
+    double ArmDistanceLeft;
+    double ArmDistanceRight;
     double DSafetyDistance;
     double leftJoint;
     double rightJoint;
