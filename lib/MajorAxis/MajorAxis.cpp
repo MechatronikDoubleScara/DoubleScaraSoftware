@@ -343,6 +343,12 @@ int MajorAxis::calculateAngles(double X, double Y)
   D = sqrt(pow(Ax-Bx, 2) + pow(Ay-By, 2));
 
 
+  //Calculate distance from 1. axis to motor axis
+  motorSafetyDistance = 30;
+  ArmDistanceLeft =   sqrt(pow(Ax - BASE_LENGTH/2, 2) + pow(Ay-0, 2));
+  ArmDistanceRight =  sqrt(pow(Bx + BASE_LENGTH/2, 2) + pow(By-0, 2));
+
+
   //Safety Distance from widest Z-Axis Point to avoid crashes with Motors -> 33mm + 2mm safety
   SafetyDistanceTCP = 35;
   //Calculate Distance TCP - Motors (Safety Area around Motors to avoid crashes of Z-Axis with Motors)
@@ -352,7 +358,12 @@ int MajorAxis::calculateAngles(double X, double Y)
   distanceTCP4  = sqrt(pow(X - (+BASE_LENGTH/2 + NEMA/2), 2) + pow(Y - (-NEMA/2), 2)); // Bottom Right
 
 
-  if (D < DSafetyDistance)
+  if (ArmDistanceLeft < motorSafetyDistance || ArmDistanceRight < motorSafetyDistance)
+  {
+    Serial.println("Arm-Position too near at Motor - STOP");
+    return -2;
+  }
+  else if (D < DSafetyDistance)
   {
     Serial.println("Left Joint too near to right Joint - STOP");
     return -2;
