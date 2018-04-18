@@ -14,7 +14,7 @@
 #define Z_MAXLIFT 21
 
 #define NUMBER_SINGLE_STEPS 200
-#define NUMBER_MICRO_STEPS 51200
+#define NUMBER_EIGHTH_STEPS 1600
 
 //#define ZAXIS_LIMIT_DOWN 100
 //#define ZAXIS_LIMIT_UP 100
@@ -27,10 +27,9 @@
 #define SENSOR1_OFFSET 0
 #define SENSOR2_OFFSET 0
 
-#define STEPPER_MAXSPEED 3000
-#define STEPPER_ACCELERATION 2500
-
-#define INIT_ANGLE_LINK 30
+#define STEPPER_MAXSPEED 40000
+#define STEPPER_SPEED 40000
+#define STEPPER_ACCELERATION 60000
 
 //===========================================================================
 //============================== Bluetooth Settings ===========================
@@ -48,5 +47,12 @@
 #define PIN_ZAXIS_SERVO 8
 #define PIN_SS_SENSOR1 10
 #define PIN_SS_SENSOR2 9
+
+//Stepper Driver Pins -> Richtige eintragen
+#define PIN_SMD_ENABLE 20
+#define PIN_MOTOR1_STEPS 21
+#define PIN_MOTOR2_STEPS 22
+#define PIN_MOTOR1_DIR 23
+#define PIN_MOTOR2_DIR 24
 
 #endif

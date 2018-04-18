@@ -1,18 +1,5 @@
 #include <MajorAxis.h>
 
-Adafruit_StepperMotor *Stepper1;
-Adafruit_StepperMotor *Stepper2;
-Adafruit_MotorShield *AFMS;
-
-void forwardstep1_SINGLE() { Stepper1->onestep(FORWARD, SINGLE); }
-void backwardstep1_SINGLE() { Stepper1->onestep(BACKWARD, SINGLE); }
-void forwardstep2_SINGLE() { Stepper2->onestep(FORWARD, SINGLE); }
-void backwardstep2_SINGLE() { Stepper2->onestep(BACKWARD, SINGLE); }
-void forwardstep1_MICRO() { Stepper1->onestep(FORWARD, MICROSTEP); }
-void backwardstep1_MICRO() { Stepper1->onestep(BACKWARD, MICROSTEP); }
-void forwardstep2_MICRO() { Stepper2->onestep(FORWARD, MICROSTEP); }
-void backwardstep2_MICRO() { Stepper2->onestep(BACKWARD, MICROSTEP); }
-
 MajorAxis::MajorAxis()
 {
   LengthLeft = 0;
@@ -27,6 +14,9 @@ MajorAxis::MajorAxis()
   PHI4d = 0;
   area = 0;
 
+  pinMode(PIN_SMD_ENABLE, OUTPUT);
+  digitalWrite(PIN_SMD_ENABLE, HIGH);
+
   //Sensor initialization
   angleSensor1 = new AS5048A(PIN_SS_SENSOR1);
   angleSensor2 = new AS5048A(PIN_SS_SENSOR2);
@@ -40,26 +30,15 @@ MajorAxis::MajorAxis()
   angleSensor1->getRotation();
   angleSensor2->getRotation();
 
-  AFMS = new Adafruit_MotorShield();
+  stepper1 = new AccelStepper(1, PIN_MOTOR1_STEPS, PIN_MOTOR1_DIR);
+  stepper2 = new AccelStepper(1, PIN_MOTOR2_STEPS, PIN_MOTOR2_DIR);
 
-  Stepper1 = AFMS->getStepper(200, 2);
-  Stepper2 = AFMS->getStepper(200, 1);
-
-  AFMS->begin();
-
-  stepper1_Single = new AccelStepper(forwardstep1_SINGLE, backwardstep1_SINGLE);
-  stepper2_Single = new AccelStepper(forwardstep2_SINGLE, backwardstep2_SINGLE);
-  stepper1_Micro = new AccelStepper(forwardstep1_MICRO, backwardstep1_MICRO);
-  stepper2_Micro = new AccelStepper(forwardstep2_MICRO, backwardstep2_MICRO);
-
-  stepper1_Single->setMaxSpeed(STEPPER_MAXSPEED);
-  stepper1_Single->setAcceleration(STEPPER_ACCELERATION);
-  stepper2_Single->setMaxSpeed(STEPPER_MAXSPEED);
-  stepper2_Single->setAcceleration(STEPPER_ACCELERATION);
-  stepper1_Micro->setMaxSpeed(STEPPER_MAXSPEED);
-  stepper1_Micro->setAcceleration(STEPPER_ACCELERATION);
-  stepper2_Micro->setMaxSpeed(STEPPER_MAXSPEED);
-  stepper2_Micro->setAcceleration(STEPPER_ACCELERATION);
+  stepper1->setMaxSpeed(STEPPER_MAXSPEED);
+  stepper1->setSpeed(STEPPER_SPEED);
+  stepper1->setAcceleration(STEPPER_ACCELERATION);
+  stepper2->setMaxSpeed(STEPPER_SPEED);
+  stepper2->setSpeed(STEPPER_MAXSPEED);
+  stepper2->setAcceleration(STEPPER_ACCELERATION);
 }
 
 void MajorAxis::get()
@@ -69,18 +48,8 @@ void MajorAxis::get()
 
 void MajorAxis::init()
 {
-  //float currentP1, currentP2;
 
-  //currentP1 = angleSensor1->getRotation();
-  //currentP2 = angleSensor2->getRotation();
-
-  /*
-  if((currentP1 < 180) && (currentP1 > 0) &&(currentP2 < 180) && (currentP2 > 0))
-    moveLinksSingleStep((180.0 - currentP1 - INIT_ANGLE_LINK)/(360.0/NUMBER_SINGLE_STEPS), (INIT_ANGLE_LINK - currentP2)/(360.0/NUMBER_SINGLE_STEPS));
-  else if((currentP2 < 0) && (currentP1 < 0))
-    moveLinksSingleStep(( - (currentP1 + (180 - INIT_ANGLE_LINK)))/(360.0/NUMBER_SINGLE_STEPS), ( - (INIT_ANGLE_LINK + currentP2))/(360.0/NUMBER_SINGLE_STEPS));
-*/
-  moveToAngle(150, 30);
+  moveToAngle(150, 30);//Überprüfen auf welcher Seite und dann init Position auf dieser
 
   currentArea = 1;
   currentPosX = 999;
@@ -94,18 +63,7 @@ int MajorAxis::movePosition(float X, float Y)
 
   if(currentArea != area)
   {
-    if(currentArea == 1)
-    {
-      moveToAngle(150, 30);
-      delay(100);
-      moveToAngle(-150, -30);
-    }
-    else if(currentArea == 2)
-    {
-      moveToAngle(-150, -30);
-      delay(100);
-      moveToAngle(150, 30);
-    }
+    changeSide();
   }
 
   moveToAngle(PHI1d, PHI4d);
@@ -123,11 +81,7 @@ void MajorAxis::moveToAngle(double alpha, double beta)
 
   a1 = calculateToGoAngle(alpha, 1);
   a2 = calculateToGoAngle(beta, 2);
-  moveLinksSingleStep(a1/(360.0/NUMBER_SINGLE_STEPS), a2/(360.0/NUMBER_SINGLE_STEPS));
-
-  //a1 = calculateToGoAngle(alpha, 1);
-  //a2 = calculateToGoAngle(beta, 2);
-  //moveLinksMicroStep(a1/(360.0/NUMBER_MICRO_STEPS), a2/(360.0/NUMBER_MICRO_STEPS));
+  moveLinksStep(a1/(360.0/NUMBER_EIGHTH_STEPS), a2/(360.0/NUMBER_EIGHTH_STEPS));
 }
 
 double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
@@ -155,25 +109,33 @@ double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
   return toGoAngle;
 }
 
-void MajorAxis::moveLinksSingleStep(int steps1, int steps2)
+void MajorAxis::moveLinksStep(int steps1, int steps2)
 {
-  stepper1_Single->move(steps1);
-  stepper2_Single->move(steps2);
-  while((stepper1_Single->distanceToGo()!=0) || (stepper2_Single->distanceToGo()!=0))
+
+  digitalWrite(PIN_SMD_ENABLE, LOW);
+  stepper1->move(steps1);
+  stepper2->move(steps2);
+  while((stepper1->distanceToGo()!=0) || (stepper2->distanceToGo()!=0))
   {
-    stepper1_Single->run();
-    stepper2_Single->run();
+    stepper1->run();
+    stepper2->run();
   }
+  digitalWrite(PIN_SMD_ENABLE, HIGH);
 }
 
-void MajorAxis::moveLinksMicroStep(int steps1, int steps2)
+void MajorAxis::changeSide()
 {
-  stepper1_Micro->move(steps1);
-  stepper2_Micro->move(steps2);
-  while((stepper1_Micro->distanceToGo()!=0) || (stepper2_Micro->distanceToGo()!=0))
+  if(currentArea == 1)
   {
-    stepper1_Micro->run();
-    stepper2_Micro->run();
+    moveToAngle(150, 30);
+    delay(500);
+    moveToAngle(-150, -30);
+  }
+  else if(currentArea == 2)
+  {
+    moveToAngle(-150, -30);
+    delay(500);
+    moveToAngle(150, 30);
   }
 }
 
@@ -186,10 +148,15 @@ void MajorAxis::setZeroPositionLinks(float offset1, float offset2)
   angleSensor2->setZeroPosition(offset2);
 }
 
-/*void MajorAxis::setMovmentParameter(float speed, float acc)
+void MajorAxis::setMomvmentParameter(int speed, int maxspeed, int acc)
 {
-
-}*/
+  stepper1->setMaxSpeed(maxspeed);
+  stepper1->setSpeed(speed);
+  stepper1->setAcceleration(acc);
+  stepper2->setMaxSpeed(maxspeed);
+  stepper2->setSpeed(speed);
+  stepper2->setAcceleration(acc);
+}
 
 double MajorAxis::getAngle1()
 {

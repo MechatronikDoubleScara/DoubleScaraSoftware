@@ -15,6 +15,7 @@ class MajorAxis
     MajorAxis();
     void init();
     void setZeroPositionLinks(float offset1, float offset2);
+    void setMomvmentParameter(int speed, int maxspeed, int acc);
     int movePosition(float X, float Y);
 
     void get();
@@ -26,19 +27,17 @@ class MajorAxis
 
   private:
     double calculateToGoAngle(double targetAngle, int motoridx);
-    void moveLinksSingleStep(int steps1, int steps2);
-    void moveLinksMicroStep(int steps1, int steps2);
+    void moveLinksStep(int steps1, int steps2);
     void moveToAngle(double alpha, double beta);
+    void changeSide();
 
     AS5048A *angleSensor1;
     AS5048A *angleSensor2;
     float sensor_offset1, sensor_offset2;
     float stepper_max_speed, stepper_acceleration;
 
-    AccelStepper *stepper1_Single;
-    AccelStepper *stepper2_Single;
-    AccelStepper *stepper1_Micro;
-    AccelStepper *stepper2_Micro;
+    AccelStepper *stepper1;
+    AccelStepper *stepper2;
 
     double LengthLeft;
     double LengthRight;
