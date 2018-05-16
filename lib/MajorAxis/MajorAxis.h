@@ -17,8 +17,7 @@ class MajorAxis
     void setZeroPositionLinks(float offset1, float offset2);
     void setMomvmentParameter(int speed, int maxspeed, int acc);
     int movePosition(float X, float Y);
-
-    void get();
+    void printSensorValue();
 
     int calculateAngles(double X, double Y); // returns 1 if position is inside work space, -1 if outside workspace, -2 if position is in safety area
     void printAngles();

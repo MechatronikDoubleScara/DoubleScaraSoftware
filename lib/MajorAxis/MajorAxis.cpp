@@ -41,11 +41,6 @@ MajorAxis::MajorAxis()
   stepper2->setAcceleration(STEPPER_ACCELERATION);
 }
 
-void MajorAxis::get()
-{
-  Serial.println(angleSensor1->getRotation());
-}
-
 void MajorAxis::init()
 {
 
@@ -156,6 +151,12 @@ void MajorAxis::setMomvmentParameter(int speed, int maxspeed, int acc)
   stepper2->setMaxSpeed(maxspeed);
   stepper2->setSpeed(speed);
   stepper2->setAcceleration(acc);
+}
+
+void MajorAxis::printSensorValue()
+{
+  Serial.print(angleSensor1->getRotation());
+  Serial.print(angleSensor2->getRotation());
 }
 
 double MajorAxis::getAngle1()
