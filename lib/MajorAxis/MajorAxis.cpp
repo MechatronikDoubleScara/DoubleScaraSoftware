@@ -68,9 +68,50 @@ int MajorAxis::movePosition(float X, float Y)
 {
   calculateAngles(X, Y);
 
+  // check if saftey positions are neccessary to reach destined coordinates
   if(currentArea != area)
   {
-    changeSide();
+    if(currentArea == 2)
+    {
+      // SAFE Position 2
+    }
+    else if (currentArea == 3)
+    {
+      // SAFE Position 3
+    }
+    else if (currentArea == -2)
+    {
+      // SAFE Position -2
+    }
+    else if (currentArea == -3)
+    {
+      // SAFE Position -3
+    }
+
+    if((currentArea < 0 && area > 0) || (currentArea > 0 && area < 0))
+    {
+      changeSide();
+    }
+
+
+    if(area == 2)
+    {
+      // SAFE Position 2
+    }
+    else if (area == 3)
+    {
+      // SAFE Position 3
+    }
+    else if (area == -2)
+    {
+      // SAFE Position -2
+    }
+    else if (area == -3)
+    {
+      // SAFE Position -3
+    }
+
+
   }
 
   moveToAngle(PHI1d, PHI4d);
