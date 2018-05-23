@@ -196,11 +196,34 @@ int MajorAxis::calculateAngles(double X, double Y)
 
   if (Y >= 0.00)
   {
-    area = 1; // robot moving in top area
+    if(X >= -70 && X <= 70)
+    {
+      area = 1; // robot moving in top area
+    }
+    else if(X < -70)
+    {
+      area = 2; // robot moving in top left area
+    }
+    else
+    {
+      area = 3; // robot moving in top right area
+    }
+
   }
   else if (Y < 0.00)
   {
-    area = 2; // robot moving in bottom area
+    if(X >= -70 && X <= 70)
+    {
+      area = -1; // robot moving in bottom area
+    }
+    else if(X < -70)
+    {
+      area = -2; // robot moving in bottom left area
+    }
+    else
+    {
+      area = -3; // robot moving in bottom right area
+    }
   }
   else
   {
@@ -209,7 +232,7 @@ int MajorAxis::calculateAngles(double X, double Y)
   }
 
 
-  if (area == 1)
+  if (area > 0)
   {
     Serial.println("Calculate angles for top area");
 
@@ -258,7 +281,7 @@ int MajorAxis::calculateAngles(double X, double Y)
     }
     PHI4d       = PHI4 * 360/(2*PI);
   }
-  else if(area == 2)
+  else if(area < 0)
   {
     Serial.println("Calculate angles for bottom area");
 
