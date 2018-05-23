@@ -6,6 +6,13 @@
 #include <Communication.h>
 #include <MajorAxis.h>
 
+
+double lastX = 0;
+double lastY = 0;
+double lastZ = 0;
+int lastMagnet = 0;
+
+
 ZAxis *zAchse;
 Endeffector *Magnet;
 MajorAxis *Achsen;
@@ -65,11 +72,31 @@ void loop() {
     if((success = (Achsen->calculateAngles(Kommunikation->getCoordinate('X'), Kommunikation->getCoordinate('Y')))) == 1)
     {
       Achsen->printAngles();
-      // GEORGS CODE für Motorbewegung
+
+      if(lastX != Kommunikation->getCoordinate('X') && lastY != Kommunikation->getCoordinate('Y'))
+      {
+        Serial.println("Make XY Move");
+        Achsen->movePosition(Kommunikation->getCoordinate('X'),Kommunikation->getCoordinate('Y'));
+      }
+      delay(200);
+      if(lastZ != Kommunikation->getCoordinate('Z'))
+      {
+        Serial.println("Make Z Move");
+        zAchse->movePosition(Kommunikation->getCoordinate('Z'));
+      }
+      delay(200);
+      if(lastMagnet != Kommunikation->getMagnet())
+      {
+        Serial.println("Make Magnet Change");
+        // Code fuer Magnet
+      }
+
       // ACCESS ANGLES with getter func -> Hauptachse->getAngle1() und Hauptachse->getAngle4()
-      Achsen->movePosition(Kommunikation->getCoordinate('X'),Kommunikation->getCoordinate('Y'));
-      delay(500);
-      zAchse->movePosition(Kommunikation->getCoordinate('Z'));
+
+      lastX = Kommunikation->getCoordinate('X');
+      lastY = Kommunikation->getCoordinate('Y');
+      lastZ = Kommunikation->getCoordinate('Z');
+      lastMagnet = Kommunikation->getMagnet();
 
       Serial.println("Send OK\n");
       Kommunikation->print("#OK~");
