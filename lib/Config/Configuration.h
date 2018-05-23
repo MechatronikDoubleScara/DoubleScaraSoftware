@@ -16,6 +16,8 @@
 #define NUMBER_SINGLE_STEPS 200
 #define NUMBER_EIGHTH_STEPS 1600
 
+#define INITIAL_Y_POSITION 100
+
 //#define ZAXIS_LIMIT_DOWN 100
 //#define ZAXIS_LIMIT_UP 100
 
@@ -28,12 +30,12 @@
 #define Z_SERVO_POS_DOWN 20.0
 #define Z_SERVO_CORRECTION_FACTOR 1.113 //empirical correction factor for conversion to linear movement
 
-#define SENSOR1_OFFSET 0
-#define SENSOR2_OFFSET 0
+#define SENSOR1_OFFSET 28
+#define SENSOR2_OFFSET 63
 
-#define STEPPER_MAXSPEED 40000
-#define STEPPER_SPEED 40000
-#define STEPPER_ACCELERATION 60000
+#define STEPPER_MAXSPEED 2000
+#define STEPPER_SPEED 2000
+#define STEPPER_ACCELERATION 1000
 
 //===========================================================================
 //============================== Bluetooth Settings ===========================
@@ -45,18 +47,18 @@
 //============================ Electrical Settings ==========================
 //===========================================================================
 
-#define PIN_SOFTWARESERIAL_RX 2
-#define PIN_SOFTWARESERIAL_TX 3
-#define PIN_ENDEFFECTOR 6
-#define PIN_ZAXIS_SERVO 8
-#define PIN_SS_SENSOR1 10
-#define PIN_SS_SENSOR2 9
+#define PIN_SOFTWARESERIAL_RX 10
+#define PIN_SOFTWARESERIAL_TX 9
+#define PIN_ENDEFFECTOR 16
+#define PIN_ZAXIS_SERVO 13
+#define PIN_SS_SENSOR1 11
+#define PIN_SS_SENSOR2 12
 
 //Stepper Driver Pins -> Richtige eintragen
-#define PIN_SMD_ENABLE 20
-#define PIN_MOTOR1_STEPS 21
-#define PIN_MOTOR2_STEPS 22
-#define PIN_MOTOR1_DIR 23
-#define PIN_MOTOR2_DIR 24
+#define PIN_SMD_ENABLE 14
+#define PIN_MOTOR1_STEPS 7
+#define PIN_MOTOR2_STEPS 5
+#define PIN_MOTOR1_DIR 8
+#define PIN_MOTOR2_DIR 6
 
 #endif

@@ -14,8 +14,8 @@ MajorAxis::MajorAxis()
   PHI4d = 0;
   area = 0;
 
-  pinMode(PIN_SMD_ENABLE, OUTPUT);
-  digitalWrite(PIN_SMD_ENABLE, HIGH);
+  //pinMode(PIN_SMD_ENABLE, OUTPUT);
+  //digitalWrite(PIN_SMD_ENABLE, HIGH);
 
   //Sensor initialization
   angleSensor1 = new AS5048A(PIN_SS_SENSOR1);
@@ -39,22 +39,34 @@ MajorAxis::MajorAxis()
   stepper2->setMaxSpeed(STEPPER_SPEED);
   stepper2->setSpeed(STEPPER_MAXSPEED);
   stepper2->setAcceleration(STEPPER_ACCELERATION);
+
+  init();
 }
 
 void MajorAxis::init()
 {
+  double a1 = angleSensor1->getRotation();
+  delay(500);
+  double a2 = angleSensor2->getRotation();
+  delay(500);
 
-  moveToAngle(150, 30);//Überprüfen auf welcher Seite und dann init Position auf dieser
-
-  currentArea = 1;
-  currentPosX = 999;
-  currentPosY = 999;
+  if(a1 > 0 && a2 > 0)
+  {
+    currentArea = 1;
+    moveToAngle(150, 30);
+  }
+  else if(a1 < 0 && a2 < 0)
+  {
+    currentArea = 2;
+    moveToAngle(-150, -30);
+  }
+  else
+    Serial.println("Error");
 }
 
 int MajorAxis::movePosition(float X, float Y)
 {
-  if(calculateAngles(X, Y) < 0)
-    return -1;
+  calculateAngles(X, Y);
 
   if(currentArea != area)
   {
@@ -106,8 +118,7 @@ double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
 
 void MajorAxis::moveLinksStep(int steps1, int steps2)
 {
-
-  digitalWrite(PIN_SMD_ENABLE, LOW);
+  //digitalWrite(PIN_SMD_ENABLE, LOW);
   stepper1->move(steps1);
   stepper2->move(steps2);
   while((stepper1->distanceToGo()!=0) || (stepper2->distanceToGo()!=0))
@@ -115,22 +126,26 @@ void MajorAxis::moveLinksStep(int steps1, int steps2)
     stepper1->run();
     stepper2->run();
   }
-  digitalWrite(PIN_SMD_ENABLE, HIGH);
+  //digitalWrite(PIN_SMD_ENABLE, HIGH);
 }
 
 void MajorAxis::changeSide()
 {
   if(currentArea == 1)
   {
+    delay(500);
     moveToAngle(150, 30);
     delay(500);
     moveToAngle(-150, -30);
+    delay(500);
   }
   else if(currentArea == 2)
   {
+    delay(500);
     moveToAngle(-150, -30);
     delay(500);
     moveToAngle(150, 30);
+    delay(500);
   }
 }
 
@@ -155,8 +170,11 @@ void MajorAxis::setMomvmentParameter(int speed, int maxspeed, int acc)
 
 void MajorAxis::printSensorValue()
 {
-  Serial.print(angleSensor1->getRotation());
-  Serial.print(angleSensor2->getRotation());
+  Serial.print("Sensor1:");
+  Serial.println(angleSensor1->getRotation());
+  Serial.print("Sensor2:");
+  Serial.println(angleSensor2->getRotation());
+  delay(500);
 }
 
 double MajorAxis::getAngle1()
