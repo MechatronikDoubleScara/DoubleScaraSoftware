@@ -74,18 +74,22 @@ int MajorAxis::movePosition(float X, float Y)
     if(currentArea == 2)
     {
       // SAFE Position 2
+      moveToAngle(-144.3, 127.2); // angles for Position (X: -115, Y: 70)
     }
     else if (currentArea == 3)
     {
       // SAFE Position 3
+      moveToAngle(52.8, -35.7); // angles for Position (X: 115, Y: 70)
     }
     else if (currentArea == -2)
     {
       // SAFE Position -2
+      moveToAngle(144.3, -127.2); // angles for Position (X: -115, Y: -70)
     }
     else if (currentArea == -3)
     {
       // SAFE Position -3
+      moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
     }
 
     if((currentArea < 0 && area > 0) || (currentArea > 0 && area < 0))
@@ -97,23 +101,29 @@ int MajorAxis::movePosition(float X, float Y)
     if(area == 2)
     {
       // SAFE Position 2
+      moveToAngle(-144.3, 127.2); // angles for Position (X: -115, Y: 60)
     }
     else if (area == 3)
     {
       // SAFE Position 3
+      moveToAngle(52.8, -35.7); // angles for Position (X: 115, Y: 70)
     }
     else if (area == -2)
     {
       // SAFE Position -2
+      moveToAngle(144.3, -127.2); // angles for Position (X: -115, Y: -70)
     }
     else if (area == -3)
     {
       // SAFE Position -3
+      moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
     }
 
 
   }
 
+
+  // angles for position from user input
   moveToAngle(PHI1d, PHI4d);
 
   currentArea = area;
@@ -172,7 +182,7 @@ void MajorAxis::moveLinksStep(int steps1, int steps2)
 
 void MajorAxis::changeSide()
 {
-  if(currentArea == 1)
+  if(currentArea > 0)
   {
     delay(500);
     moveToAngle(150, 30);
@@ -180,7 +190,7 @@ void MajorAxis::changeSide()
     moveToAngle(-150, -30);
     delay(500);
   }
-  else if(currentArea == 2)
+  else if(currentArea < 0)
   {
     delay(500);
     moveToAngle(-150, -30);
