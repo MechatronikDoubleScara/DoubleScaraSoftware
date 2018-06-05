@@ -171,6 +171,11 @@ double Communication::getCoordinate(char axis)
 
 }
 
+int Communication::getMagnet()
+{
+  return magnet;
+}
+
 int Communication::getActivity()
 {
   return activity;

@@ -20,6 +20,7 @@ public:
 
   int getMode();
   double getCoordinate(char axis);
+  int getMagnet();
   int getActivity();
 
 

@@ -68,11 +68,62 @@ int MajorAxis::movePosition(float X, float Y)
 {
   calculateAngles(X, Y);
 
+  // check if saftey positions are neccessary to reach destined coordinates
   if(currentArea != area)
   {
-    changeSide();
+    if(currentArea == 2)
+    {
+      // SAFE Position 2
+      moveToAngle(-144.3, 127.2); // angles for Position (X: -115, Y: 70)
+    }
+    else if (currentArea == 3)
+    {
+      // SAFE Position 3
+      moveToAngle(52.8, -35.7); // angles for Position (X: 115, Y: 70)
+    }
+    else if (currentArea == -2)
+    {
+      // SAFE Position -2
+      moveToAngle(144.3, -127.2); // angles for Position (X: -115, Y: -70)
+    }
+    else if (currentArea == -3)
+    {
+      // SAFE Position -3
+      moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
+    }
+
+    if((currentArea < 0 && area > 0) || (currentArea > 0 && area < 0))
+    {
+      changeSide();
+    }
+
+
+    if(area == 2)
+    {
+      // SAFE Position 2
+      moveToAngle(-144.3, 127.2); // angles for Position (X: -115, Y: 60)
+    }
+    else if (area == 3)
+    {
+      // SAFE Position 3
+      moveToAngle(52.8, -35.7); // angles for Position (X: 115, Y: 70)
+    }
+    else if (area == -2)
+    {
+      // SAFE Position -2
+      moveToAngle(144.3, -127.2); // angles for Position (X: -115, Y: -70)
+    }
+    else if (area == -3)
+    {
+      // SAFE Position -3
+      moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
+    }
+
+
   }
 
+
+  // angles for position from user input
   moveToAngle(PHI1d, PHI4d);
 
   currentArea = area;
@@ -137,7 +188,7 @@ void MajorAxis::moveLinksStep(int steps1, int steps2)
 
 void MajorAxis::changeSide()
 {
-  if(currentArea == 1)
+  if(currentArea > 0)
   {
     delay(500);
     moveToAngle(150, 30);
@@ -145,7 +196,7 @@ void MajorAxis::changeSide()
     moveToAngle(-150, -30);
     delay(500);
   }
-  else if(currentArea == 2)
+  else if(currentArea < 0)
   {
     delay(500);
     moveToAngle(-150, -30);
@@ -202,11 +253,34 @@ int MajorAxis::calculateAngles(double X, double Y)
 
   if (Y >= 0.00)
   {
-    area = 1; // robot moving in top area
+    if(X >= -70 && X <= 70)
+    {
+      area = 1; // robot moving in top area
+    }
+    else if(X < -70)
+    {
+      area = 2; // robot moving in top left area
+    }
+    else
+    {
+      area = 3; // robot moving in top right area
+    }
+
   }
   else if (Y < 0.00)
   {
-    area = 2; // robot moving in bottom area
+    if(X >= -70 && X <= 70)
+    {
+      area = -1; // robot moving in bottom area
+    }
+    else if(X < -70)
+    {
+      area = -2; // robot moving in bottom left area
+    }
+    else
+    {
+      area = -3; // robot moving in bottom right area
+    }
   }
   else
   {
@@ -215,7 +289,7 @@ int MajorAxis::calculateAngles(double X, double Y)
   }
 
 
-  if (area == 1)
+  if (area > 0)
   {
     Serial.println("Calculate angles for top area");
 
@@ -264,7 +338,7 @@ int MajorAxis::calculateAngles(double X, double Y)
     }
     PHI4d       = PHI4 * 360/(2*PI);
   }
-  else if(area == 2)
+  else if(area < 0)
   {
     Serial.println("Calculate angles for bottom area");
 
