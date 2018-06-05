@@ -57,7 +57,7 @@ void MajorAxis::init()
   }
   else if(a1 < 0 && a2 < 0)
   {
-    currentArea = 2;
+    currentArea = -1;
     moveToAngle(-150, -30);
   }
   else
@@ -69,6 +69,7 @@ int MajorAxis::movePosition(float X, float Y)
   calculateAngles(X, Y);
 
   // check if saftey positions are neccessary to reach destined coordinates
+
   if(currentArea != area)
   {
     if(currentArea == 2)
@@ -92,11 +93,14 @@ int MajorAxis::movePosition(float X, float Y)
       moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
     }
 
+    delay(500);
+
     if((currentArea < 0 && area > 0) || (currentArea > 0 && area < 0))
     {
       changeSide();
     }
 
+    delay(500);
 
     if(area == 2)
     {
@@ -118,10 +122,9 @@ int MajorAxis::movePosition(float X, float Y)
       // SAFE Position -3
       moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
     }
-
-
   }
 
+  delay(500);
 
   // angles for position from user input
   moveToAngle(PHI1d, PHI4d);
@@ -253,40 +256,37 @@ int MajorAxis::calculateAngles(double X, double Y)
 
   if (Y >= 0.00)
   {
-    if(X >= -70 && X <= 70)
-    {
-      area = 1; // robot moving in top area
-    }
-    else if(X < -70)
+
+    if(X < 0 && Y < 56)
     {
       area = 2; // robot moving in top left area
     }
-    else
+    else if(X > 0 && Y < 56)
     {
       area = 3; // robot moving in top right area
     }
-
-  }
-  else if (Y < 0.00)
-  {
-    if(X >= -70 && X <= 70)
-    {
-      area = -1; // robot moving in bottom area
-    }
-    else if(X < -70)
-    {
-      area = -2; // robot moving in bottom left area
-    }
     else
     {
-      area = -3; // robot moving in bottom right area
+      area = 1; // robot moving in top area
     }
+
   }
   else
   {
-    Serial.println("Error");
-    return -1; //error
+    if(X < 0 && Y > -56)
+    {
+      area = -2; // robot moving in bottom left area
+    }
+    else if(X > 0 && Y > -56)
+    {
+      area = -3; // robot moving in bottom right area
+    }
+    else
+    {
+      area = -1; // robot moving in bottom area
+    }
   }
+
 
 
   if (area > 0)
