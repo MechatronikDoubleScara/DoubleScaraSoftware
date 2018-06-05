@@ -5,6 +5,7 @@ ZAxis::ZAxis(const int Pin = PIN_ZAXIS_SERVO, int speed = Z_SERVO_SPEED): servoP
   zServo.attach(servoPin);
   posUp = Z_SERVO_POS_UP;
   posDown = Z_SERVO_POS_DOWN;
+  moveUp();
 }
 
 int ZAxis::movePosition(float position)
