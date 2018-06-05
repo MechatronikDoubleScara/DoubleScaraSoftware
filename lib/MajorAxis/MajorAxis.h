@@ -17,6 +17,7 @@ class MajorAxis
     void setZeroPositionLinks(float offset1, float offset2);
     void setMomvmentParameter(int speed, int maxspeed, int acc);
     int movePosition(float X, float Y);
+    void moveToAngle(double alpha, double beta);
     void printSensorValue();
 
     int calculateAngles(double X, double Y); // returns 1 if position is inside work space, -1 if outside workspace, -2 if position is in safety area
@@ -27,7 +28,6 @@ class MajorAxis
   private:
     double calculateToGoAngle(double targetAngle, int motoridx);
     void moveLinksStep(int steps1, int steps2);
-    void moveToAngle(double alpha, double beta);
     void changeSide();
 
     AS5048A *angleSensor1;

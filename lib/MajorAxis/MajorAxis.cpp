@@ -105,12 +105,18 @@ double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
       toGoAngle = 360.0 - currentAngle + targetAngle;
     else if((targetAngle > 0) && (currentAngle < 0))
       toGoAngle = - currentAngle + targetAngle - 360.0;
+
+      Serial.print("toGoAngle M1: ");
+      Serial.println(toGoAngle);
   }
   else if(motoridx == 2)
   {
     currentAngle = angleSensor2->getRotation();
 
     toGoAngle = targetAngle - currentAngle;
+
+    Serial.print("toGoAngle M2: ");
+    Serial.println(toGoAngle);
   }
 
   return toGoAngle;
