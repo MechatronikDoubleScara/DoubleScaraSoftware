@@ -47,9 +47,9 @@
 //============================ Electrical Settings ==========================
 //===========================================================================
 
-#define PIN_SOFTWARESERIAL_RX 10 //TX am Bluetooth
-#define PIN_SOFTWARESERIAL_TX 9 //RX am Bluetooth
-#define PIN_ENDEFFECTOR 16
+#define PIN_SOFTWARESERIAL_RX A14 //TX am Bluetooth
+#define PIN_SOFTWARESERIAL_TX 17 //RX am Bluetooth
+#define PIN_ENDEFFECTOR 45
 #define PIN_ZAXIS_SERVO 13
 #define PIN_SS_SENSOR1 11
 #define PIN_SS_SENSOR2 12

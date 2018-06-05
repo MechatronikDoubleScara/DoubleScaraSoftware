@@ -48,10 +48,12 @@ void loop() {
       case 2:
         // In Activity 2 clear Build Plate
         Serial.println("In Activity 2 clear Build Plate");
+
         break;
       case 3:
         // In Activity 3 clear Build Plate
         Serial.println("In Activity 3 clear Build Plate");
+
         break;
       default:
         Serial.println("error no activity transmitted");

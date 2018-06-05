@@ -396,7 +396,7 @@ int MajorAxis::calculateAngles(double X, double Y)
   if (isnan(PHI1) || isnan(PHI4))
   {
     Serial.println("Coordinate not in workspace");
-    return -1; // one angle is nan -> position out of workspace
+    return -2; // one angle is nan -> position out of workspace
   }
 
   // Distance D with safety distance (crash between joints)
@@ -427,27 +427,27 @@ int MajorAxis::calculateAngles(double X, double Y)
   if (ArmDistanceLeft < motorSafetyDistance || ArmDistanceRight < motorSafetyDistance)
   {
     Serial.println("Arm-Position too near at Motor - STOP");
-    return -2;
+    return -3;
   }
   else if (D < DSafetyDistance)
   {
     Serial.println("Left Joint too near to right Joint - STOP");
-    return -2;
+    return -3;
   }
   else if (X >= (-BASE_LENGTH/2 - NEMA/2) && X <= (BASE_LENGTH/2 + NEMA/2) && Y <= (NEMA/2 + SafetyDistanceTCP) && Y >= (-NEMA/2 - SafetyDistanceTCP))
   {
     Serial.println("TCP in saftey area - only accessable with predefined movement - STOP");
-    return -2;
+    return -3;
   }
   else if (X >= (-BASE_LENGTH/2 - NEMA/2 - SafetyDistanceTCP) && X <= (BASE_LENGTH/2 + NEMA/2 + SafetyDistanceTCP) && Y <= (NEMA/2) && Y >= (-NEMA/2))
   {
     Serial.println("TCP in saftey area - only accessable with predefined movement - STOP");
-    return -2;
+    return -3;
   }
   else if (distanceTCP1 <= SafetyDistanceTCP || distanceTCP2 <= SafetyDistanceTCP || distanceTCP3 <= SafetyDistanceTCP || distanceTCP4 <= SafetyDistanceTCP)
   {
     Serial.println("TCP in saftey area - only accessable with predefined movement - STOP");
-    return -2;
+    return -3;
   }
 
   return 1;
