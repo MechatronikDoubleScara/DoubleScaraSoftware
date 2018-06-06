@@ -30,7 +30,7 @@ ObjectCarrier::ObjectCarrier(int position_oc){
 
 int ObjectCarrier::setMode(int type = 0){
   switch (type) {
-    case 0: // standard object carrier; all reachable positions allowed
+    case OBJECTCARRIER_STD: // standard object carrier; all reachable positions allowed
 
       // set every status to 0
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
@@ -54,7 +54,7 @@ int ObjectCarrier::setMode(int type = 0){
       Position[9][5].status = -1;
       break;
 
-    case 1: // Object carrier for TicTacToe; 3x3 positions allowed (empty)
+    case OBJECTCARRIER_TICTACTOE: // Object carrier for TicTacToe; 3x3 positions allowed (empty)
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
           if (j > 2 || i > 2)
@@ -64,32 +64,32 @@ int ObjectCarrier::setMode(int type = 0){
         }
       }
       break;
-    case 2: // Magazine Object carrier for one colour; 8x4 (full)
+    case OBJECTCARRIER_MAGAZINE: // Magazine Object carrier for one colour; 8x4 (full)
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
           if (j > 1 && j <= 5 && i > 0 && i <= 4 )
-            Position[j][i].status = 1; // positon for colour 2
+            Position[j][i].status = 1; // positon std type
           else if (j > 5 && j <= 9 && i > 0 && i <= 4 )
-            Position[j][i].status = 1; // positon for colour 3
+            Position[j][i].status = 1; // positon std type
           else
             Position[j][i].status = -1; // mark unreachable positions with -1
         }
       }
       break;
 
-    case 3: // Magazine Object carrier for two colours; 4x4 for each colour (full)
+    case OBJECTCARRIER_MAGAZINE_COLOUR: // Magazine Object carrier for two colours; 4x4 for each colour (full)
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
           if (j > 1 && j <= 5 && i > 0 && i <= 4 )
-            Position[j][i].status = 2; // positon for colour 2
+            Position[j][i].status = 2; // positon colour 2
           else if (j > 5 && j <= 9 && i > 0 && i <= 4 )
-            Position[j][i].status = 3; // positon for colour 3
+            Position[j][i].status = 3; // positon colour 3
           else
             Position[j][i].status = -1; // mark unreachable positions with -1
         }
       }
       break;
-    case 4:
+    case OBJECTCARRIER_SHAPE_SMILEY:
       // set every status to -1
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
@@ -107,7 +107,7 @@ int ObjectCarrier::setMode(int type = 0){
       Position[6][4].status = 0;
       break;
 
-    case 5:
+    case OBJECTCARRIER_SHAPE_ARROW:
       // set every status to -1
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){

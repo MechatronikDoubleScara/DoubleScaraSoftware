@@ -1,6 +1,8 @@
 #ifndef OBJECTCARRIER
 #define OBJECTCARRIER
 
+#include <Communication.h>
+
 #define OBJECTCARRIER_OFFSET_X  110 // x-Offset from coordinat system origin to first element in object carrier (in mm)
 #define OBJECTCARRIER_OFFSET_Y  60  // y-Offset from coordinat system origin to first element in object carrier (in mm)
 #define OBJECTCARRIER_INCREMENT 20  // Increment between positions in the object carrier in both x and y (in mm)
@@ -17,8 +19,8 @@
 // use with function setMode for parameter <mode>
 #define OBJECTCARRIER_STD  0          // standard object carrier; all reachable positions allowed
 #define OBJECTCARRIER_TICTACTOE  1    // Object carrier for TicTacToe; 3x3 positions allowed
-#define OBJECTCARRIER_MAGAZINE_COLOUR  2  // Magazine Object carrier for two colours; 4x4 for each colour
-#define OBJECTCARRIER_MAGAZINE  3     // Magazine Object carrier for one colour; 8x4
+#define OBJECTCARRIER_MAGAZINE  2     // Magazine Object carrier for one colour; 8x4
+#define OBJECTCARRIER_MAGAZINE_COLOUR  3  // Magazine Object carrier for two colours; 4x4 for each colour
 #define OBJECTCARRIER_SHAPE_SMILEY  4 //virtual object carrier for shape smiley
 #define OBJECTCARRIER_SHAPE_ARROW  5  //virtual object carrier for shape arrow
 

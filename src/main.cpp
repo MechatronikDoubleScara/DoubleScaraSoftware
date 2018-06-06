@@ -29,7 +29,7 @@ zAchse = new ZAxis();
 Magnet = new Endeffector();
 Achsen = new MajorAxis();
 UpperObjCarrier = new ObjectCarrier(OBJECTCARRIER_UPPER);
-UpperObjCarrier = new ObjectCarrier(OBJECTCARRIER_LOWER);
+LowerObjCarrier = new ObjectCarrier(OBJECTCARRIER_LOWER);
 Roboter = new Robot(Achsen, zAchse, Magnet);
 
 //load default object carriers
@@ -41,7 +41,6 @@ LowerObjCarrier->setMode(OBJECTCARRIER_MAGAZINE);
 }
 
 void loop() {
-
 
   Kommunikation->recieve();
   //Zachse->movePosition(5);
@@ -169,7 +168,7 @@ void loop() {
     Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
-  }
+   }
 
 
 //Achsen->printSensorValue();

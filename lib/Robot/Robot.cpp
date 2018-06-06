@@ -27,7 +27,7 @@ int Robot::movePart(ObjectCarrier* ObjectCarrier1, int x1_pos, int y1_pos, Objec
 
   MajorAxis->movePosition(x1_coord, y1_coord);
   ZAxis->moveDown();
-  delay(500);
+  delay(750);
   Endeffector->setState(true);
   delay(250);
   ZAxis->moveUp();
@@ -72,7 +72,7 @@ int Robot::cleanPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrie
 }
 
 int Robot::fillPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2){
-  for (int type = 1; (!ObjectCarrier1->isFull()) && (type <= OBJECTCARRIER_NUM_MAX_TYPES); type++){
+  for (int type = 1; (!ObjectCarrier2->isFull()) && (type <= OBJECTCARRIER_NUM_MAX_TYPES); type++){
       while(1){
         int x1_pos, y1_pos, x2_pos, y2_pos;
         if(ObjectCarrier2->nextFreePosition(x2_pos, y2_pos, type) != 0){
@@ -85,7 +85,7 @@ int Robot::fillPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier
         movePart(ObjectCarrier1, x1_pos, y1_pos, ObjectCarrier2, x2_pos, y2_pos, 1);
       }
   }
-  if (ObjectCarrier1->isFull()){
+  if (ObjectCarrier2->isFull()){
     return 0;
   }
   else{

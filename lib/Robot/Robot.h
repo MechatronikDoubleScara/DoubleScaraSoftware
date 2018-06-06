@@ -12,8 +12,8 @@
 #define SHAPE_SMILEY 1
 #define SHAPE_ARROW 2
 
-#define PLAYER1 2
-#define PLAYER2 3
+#define PLAYER1 1
+#define PLAYER2 2
 #define TYPE_PLAYER1 2
 #define TYPE_PLAYER2 3
 
