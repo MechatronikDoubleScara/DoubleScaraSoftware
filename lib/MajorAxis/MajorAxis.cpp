@@ -194,19 +194,19 @@ void MajorAxis::changeSide()
   if(currentArea > 0)
   {
     delay(500);
-    moveToAngle(140, 40);
+    moveToAngle(130, 50);
     delay(500);
-    setMomvmentParameter(4000, 4000, 10000);
-    moveToAngle(-140, -40);
+    setMomvmentParameter(8000, 8000, 12000);
+    moveToAngle(-130, -50);
     delay(500);
   }
   else if(currentArea < 0)
   {
     delay(500);
-    moveToAngle(-140, -40);
+    moveToAngle(-130, -50);
     delay(500);
-    setMomvmentParameter(4000, 4000, 10000);
-    moveToAngle(140, 40);
+    setMomvmentParameter(8000, 8000, 12000);
+    moveToAngle(130, 50);
     delay(500);
   }
   setMomvmentParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);

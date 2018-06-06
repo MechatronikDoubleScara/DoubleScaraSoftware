@@ -25,17 +25,17 @@
 //============================== Movement Settings ===========================
 //===========================================================================
 
-#define Z_SERVO_SPEED 50 // defines the speed of the servo motor for z lift (0-255)
+#define Z_SERVO_SPEED 80 // defines the speed of the servo motor for z lift (0-255)
 #define Z_SERVO_POS_UP 0.0 // defines default up and down position for move Up/Down instructions in millimeters (0-21,5)
-#define Z_SERVO_POS_DOWN 13.0
+#define Z_SERVO_POS_DOWN 15.0
 #define Z_SERVO_CORRECTION_FACTOR 1.113 //empirical correction factor for conversion to linear movement
 
-#define SENSOR1_OFFSET 29
-#define SENSOR2_OFFSET 62.8
+#define SENSOR1_OFFSET 30.14 //32.25 // -147.75 + 180
+#define SENSOR2_OFFSET 66.17 //65.05
 
-#define STEPPER_MAXSPEED 2000
-#define STEPPER_SPEED 2000
-#define STEPPER_ACCELERATION 1000
+#define STEPPER_MAXSPEED 3000
+#define STEPPER_SPEED 3000
+#define STEPPER_ACCELERATION 1500
 
 //===========================================================================
 //============================== Bluetooth Settings ===========================

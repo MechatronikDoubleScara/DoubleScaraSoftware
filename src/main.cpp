@@ -25,9 +25,14 @@ Kommunikation = new Communication();
 zAchse = new ZAxis();
 Magnet = new Endeffector();
 Achsen = new MajorAxis();
+
+
+//zAchse->moveDown();
+
 }
 
 void loop() {
+
 
   Kommunikation->recieve();
   //Zachse->movePosition(5);
@@ -77,6 +82,8 @@ void loop() {
 
       if(lastX != Kommunikation->getCoordinate('X') || lastY != Kommunikation->getCoordinate('Y'))
       {
+        zAchse->moveUp();
+        delay(200);
         Serial.println("Make XY Move");
         Achsen->movePosition(Kommunikation->getCoordinate('X'),Kommunikation->getCoordinate('Y'));
       }
@@ -150,5 +157,8 @@ void loop() {
     Kommunikation->resetRecievedData();
   }
 
+
+//Achsen->printSensorValue();
+//delay(500);
 
 }
