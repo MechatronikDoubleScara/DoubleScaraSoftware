@@ -180,3 +180,28 @@ int Communication::getActivity()
 {
   return activity;
 }
+
+int Communication::getShape()
+{
+  return shape;
+}
+
+int Communication::getTicTacToe(int& x_pos, int& y_pos, int& type)
+{
+  x_pos = row;
+  y_pos = col;
+
+  switch(player)
+  {
+    case 1:
+      type = 2;
+      break;
+    case 2:
+      type = 3;
+      break;
+    default:
+      return -1;
+  }
+
+  return 0;
+}
