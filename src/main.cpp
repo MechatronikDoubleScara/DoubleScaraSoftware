@@ -83,6 +83,7 @@ void loop() {
       if(lastX != Kommunikation->getCoordinate('X') || lastY != Kommunikation->getCoordinate('Y'))
       {
         zAchse->moveUp();
+        lastZ = 0;
         delay(200);
         Serial.println("Make XY Move");
         Achsen->movePosition(Kommunikation->getCoordinate('X'),Kommunikation->getCoordinate('Y'));
