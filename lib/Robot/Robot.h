@@ -6,14 +6,31 @@
 #include <ZAxis.h>
 #include <MajorAxis.h>
 #include <ObjectCarrier.h>
+#include <Configuration.h>
+
+// Defines for Modes Shapes, ticTacToe for external function calls
+#define SHAPE_SMILEY 1
+#define SHAPE_ARROW 2
+
+#define PLAYER1 2
+#define PLAYER2 3
+#define TYPE_PLAYER1 2
+#define TYPE_PLAYER2 3
+
 
 class Robot{
 public:
   Robot(MajorAxis* MA, ZAxis* ZA, Endeffector* EF) : MajorAxis(MA), ZAxis(ZA), Endeffector(EF) {}
 
   int movePart(ObjectCarrier* ObjectCarrier1, int x1_pos, int y1_pos, ObjectCarrier* ObjectCarrier2, int x2_pos, int y2_pos, int lockType=0);
+  int movePosition(ObjectCarrier* ObjectCarrier, int x_pos, int y_pos);
   int cleanPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2); //clean ObjectCarrier1 and store elements in ObjectCarrier2
   int fillPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2); // fill ObjectCarrier2 with suitable Elements of Type of Object Carrier1
+  int makeShape(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2, int shape);
+  int ticTacToeInit(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2);
+  int ticTacToePlace(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2, int x2_pos, int y2_pos, int player);
+  int manualModeInit(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2);
+
 private:
   MajorAxis* MajorAxis;
   ZAxis* ZAxis;

@@ -19,6 +19,8 @@ Endeffector *Magnet;
 MajorAxis *Achsen;
 Communication *Kommunikation;
 Robot *Roboter;
+ObjectCarrier *UpperObjCarrier;
+ObjectCarrier *LowerObjCarrier;
 
 void setup() {
 Serial.begin(9600);
@@ -26,8 +28,13 @@ Kommunikation = new Communication();
 zAchse = new ZAxis();
 Magnet = new Endeffector();
 Achsen = new MajorAxis();
+UpperObjCarrier = new ObjectCarrier(OBJECTCARRIER_UPPER);
+UpperObjCarrier = new ObjectCarrier(OBJECTCARRIER_LOWER);
 Roboter = new Robot(Achsen, zAchse, Magnet);
 
+//load default object carriers
+UpperObjCarrier->setMode(OBJECTCARRIER_STD);
+LowerObjCarrier->setMode(OBJECTCARRIER_MAGAZINE);
 
 //zAchse->moveDown();
 
@@ -50,17 +57,21 @@ void loop() {
     {
       case 1:
         // In Activity 1 do nothing because ManualMode
-        Serial.println("In Activity 1 do nothing because ManualMode");
+        Serial.println("In Activity 1 clear Bild Plate");
+        Roboter->cleanPlate(UpperObjCarrier, LowerObjCarrier);
+        Roboter->manualModeInit(LowerObjCarrier, UpperObjCarrier);
         break;
       case 2:
         // In Activity 2 clear Build Plate
         Serial.println("In Activity 2 clear Build Plate");
-
+        Roboter->cleanPlate(UpperObjCarrier, LowerObjCarrier);
+        // Object carriers loded in function makeShape()
         break;
       case 3:
         // In Activity 3 clear Build Plate
         Serial.println("In Activity 3 clear Build Plate");
-
+        Roboter->cleanPlate(UpperObjCarrier, LowerObjCarrier);
+        Roboter->ticTacToeInit(LowerObjCarrier, UpperObjCarrier);
         break;
       default:
         Serial.println("error no activity transmitted");
@@ -138,23 +149,23 @@ void loop() {
       Kommunikation->print("#E3~");
       Kommunikation->resetRecievedData();
     }
-
-
   }
   else if (Kommunikation->getMode() == 2)
   {
     // CODE OF MODE 2
     Serial.println("I'm in Mode 2: Shapes");
-    delay(3000);
+    Roboter->makeShape(LowerObjCarrier, UpperObjCarrier, Kommunikation->getShape());
     Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
   }
   else if (Kommunikation->getMode() == 3)
   {
-    // CODE OF MODE 2
+    // CODE OF MODE 3
     Serial.println("I'm in Mode 3: TicTacToe");
-    delay(3000);
+    int x2_pos, y2_pos, player;
+    Kommunikation->getTicTacToe(x2_pos, y2_pos, player);
+    Roboter->ticTacToePlace(LowerObjCarrier, UpperObjCarrier, x2_pos, y2_pos, player);
     Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();

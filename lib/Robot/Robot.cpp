@@ -1,5 +1,17 @@
 #include <Robot.h>
 
+int Robot::movePosition(ObjectCarrier* ObjectCarrier, int x_pos, int y_pos){
+  float x_coord = ObjectCarrier->getCoordX(x_pos, y_pos);
+  float y_coord = ObjectCarrier->getCoordY(x_pos, y_pos);
+
+  if (abs(x_coord) < 1 || abs(y_coord) < 1 ){
+    return -1;
+  }
+  MajorAxis->movePosition(x_coord, y_coord);
+  return 0;
+}
+
+
 int Robot::movePart(ObjectCarrier* ObjectCarrier1, int x1_pos, int y1_pos, ObjectCarrier* ObjectCarrier2, int x2_pos, int y2_pos, int lockType=0){
 
   float x1_coord = ObjectCarrier1->getCoordX(x1_pos, y1_pos);
@@ -10,7 +22,7 @@ int Robot::movePart(ObjectCarrier* ObjectCarrier1, int x1_pos, int y1_pos, Objec
   float y2_coord = ObjectCarrier2->getCoordY(x2_pos, y2_pos);
 
 
-  if (abs(x1_coord) > 1 || abs(y1_coord) > 1 || abs(x2_coord) > 1 || abs(y2_coord) > 1)
+  if (abs(x1_coord) < 1 || abs(y1_coord) < 1 || abs(x2_coord) < 1 || abs(y2_coord) < 1)
     return -1;
 
   MajorAxis->movePosition(x1_coord, y1_coord);
@@ -80,4 +92,71 @@ int Robot::fillPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier
     Serial.print("Error: unable to fill plate (unknown error)\n");
     return-1;
   }
+}
+
+int Robot::makeShape(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2, int shape){
+  switch(shape){
+    case SHAPE_ARROW:
+      ObjectCarrier2->setMode(OBJECTCARRIER_SHAPE_ARROW);
+      Serial.println("Object carrier SHAPE_ARROW loded");
+      break;
+    case SHAPE_SMILEY:
+      ObjectCarrier2->setMode(OBJECTCARRIER_SHAPE_SMILEY);
+      Serial.println("Object carrier SHAPE_SMILEY loded");
+      break;
+    default:
+      Serial.println("Error: Can not buid shape (Unknown Shape)");
+      return -1;
+      break;
+  }
+  ObjectCarrier1->setMode(OBJECTCARRIER_MAGAZINE);
+  Serial.println("Object carrier MAGAZINE loded");
+
+  int success = fillPlate(ObjectCarrier1, ObjectCarrier2);
+  if(success == 0){
+    Serial.println("Shape successfully buid");
+  }
+  return success;
+}
+
+int Robot::ticTacToeInit(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2){
+  ObjectCarrier1->setMode(OBJECTCARRIER_MAGAZINE_COLOUR);
+  Serial.println("Object carrier MAGAZINE_COLOUR loded");
+  ObjectCarrier2->setMode(OBJECTCARRIER_TICTACTOE);
+  Serial.println("Object carrier TICTACTOE loaded");
+  return 0;
+}
+
+int Robot::ticTacToePlace(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2, int x2_pos, int y2_pos, int player){
+  int type;
+  switch(player)
+  {
+    case PLAYER1:
+      type = TYPE_PLAYER1;
+      break;
+    case PLAYER2:
+      type = TYPE_PLAYER2;
+      break;
+    default:
+      Serial.println("Error: unable to place part (Unknown Player)");
+      return -1;
+  }
+  int x1_pos, y1_pos;
+  if (ObjectCarrier1->nextOccupiedPosition(x1_pos, y1_pos, type) != 0){
+    Serial.println("Error: unable to place part (no parts of required type)");
+    return -1;
+  }
+  int success = movePart(ObjectCarrier1, x1_pos, y1_pos, ObjectCarrier2, x2_pos, y2_pos, 1);
+  if(success == 0){
+    Serial.println("Successfuly placed part");
+  }
+  return success;
+}
+
+int Robot::manualModeInit(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2){
+  ObjectCarrier1->setMode(OBJECTCARRIER_MAGAZINE);
+  Serial.println("Object carrier MAGAZINE loded");
+  ObjectCarrier2->setMode(OBJECTCARRIER_STD);
+  Serial.println("Object carrier STANDARD loaded");
+  return 0;
 }
