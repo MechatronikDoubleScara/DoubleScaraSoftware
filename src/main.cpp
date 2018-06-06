@@ -75,7 +75,7 @@ void loop() {
     {
       Achsen->printAngles();
 
-      if(lastX != Kommunikation->getCoordinate('X') && lastY != Kommunikation->getCoordinate('Y'))
+      if(lastX != Kommunikation->getCoordinate('X') || lastY != Kommunikation->getCoordinate('Y'))
       {
         Serial.println("Make XY Move");
         Achsen->movePosition(Kommunikation->getCoordinate('X'),Kommunikation->getCoordinate('Y'));
@@ -90,7 +90,7 @@ void loop() {
       if(lastMagnet != Kommunikation->getMagnet())
       {
         Serial.println("Make Magnet Change");
-        // Code fuer Magnet
+        Magnet->setState(Kommunikation->getMagnet());
       }
 
       // ACCESS ANGLES with getter func -> Hauptachse->getAngle1() und Hauptachse->getAngle4()

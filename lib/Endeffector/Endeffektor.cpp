@@ -3,6 +3,7 @@
 Endeffector::Endeffector(const int Pin = PIN_ENDEFFECTOR): magnetPin(Pin)
 {
   pinMode(magnetPin, OUTPUT);
+  init();
 }
 
 void Endeffector::init()

@@ -194,19 +194,22 @@ void MajorAxis::changeSide()
   if(currentArea > 0)
   {
     delay(500);
-    moveToAngle(150, 30);
+    moveToAngle(140, 40);
     delay(500);
-    moveToAngle(-150, -30);
+    setMomvmentParameter(4000, 4000, 10000);
+    moveToAngle(-140, -40);
     delay(500);
   }
   else if(currentArea < 0)
   {
     delay(500);
-    moveToAngle(-150, -30);
+    moveToAngle(-140, -40);
     delay(500);
-    moveToAngle(150, 30);
+    setMomvmentParameter(4000, 4000, 10000);
+    moveToAngle(140, 40);
     delay(500);
   }
+  setMomvmentParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
 }
 
 void MajorAxis::setZeroPositionLinks(float offset1, float offset2)
