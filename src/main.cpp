@@ -5,6 +5,7 @@
 #include <ZAxis.h>
 #include <Communication.h>
 #include <MajorAxis.h>
+#include <Robot.h>
 
 
 double lastX = 0;
@@ -17,14 +18,15 @@ ZAxis *zAchse;
 Endeffector *Magnet;
 MajorAxis *Achsen;
 Communication *Kommunikation;
+Robot *Roboter;
 
 void setup() {
 Serial.begin(9600);
-Serial1.begin(9600);
 Kommunikation = new Communication();
 zAchse = new ZAxis();
 Magnet = new Endeffector();
 Achsen = new MajorAxis();
+Roboter = new Robot(Achsen, zAchse, Magnet);
 
 
 //zAchse->moveDown();
