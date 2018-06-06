@@ -19,9 +19,18 @@ public:
   void resetRecievedData();
 
   int getMode();
+  int getActivity();
+  // Mode 1
+
   double getCoordinate(char axis);
   int getMagnet();
-  int getActivity();
+
+  // Mode 2
+  int getShape();
+
+  // Mode 3
+  int getTicTacToe(int& row, int& col, int& player);
+
 
 
 private:

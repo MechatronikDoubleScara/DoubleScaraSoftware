@@ -54,7 +54,7 @@ int ObjectCarrier::setMode(int type = 0){
       Position[9][5].status = -1;
       break;
 
-    case 1: // Object carrier for TicTacToe; 3x3 positions allowed
+    case 1: // Object carrier for TicTacToe; 3x3 positions allowed (empty)
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
           if (j > 2 || i > 2)
@@ -64,18 +64,67 @@ int ObjectCarrier::setMode(int type = 0){
         }
       }
       break;
-
-    case 2: // Magazine Object carrier for two colours; 4x4 for each colour
+    case 2: // Magazine Object carrier for one colour; 8x4 (full)
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
           if (j > 1 && j <= 5 && i > 0 && i <= 4 )
-            Position[j][i].status = -2; // reservate positon for colour 2
+            Position[j][i].status = 1; // positon for colour 2
           else if (j > 5 && j <= 9 && i > 0 && i <= 4 )
-            Position[j][i].status = -3; // reservate positon for colour 3
+            Position[j][i].status = 1; // positon for colour 3
           else
             Position[j][i].status = -1; // mark unreachable positions with -1
         }
       }
+      break;
+
+    case 3: // Magazine Object carrier for two colours; 4x4 for each colour (full)
+      for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
+        for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
+          if (j > 1 && j <= 5 && i > 0 && i <= 4 )
+            Position[j][i].status = 2; // positon for colour 2
+          else if (j > 5 && j <= 9 && i > 0 && i <= 4 )
+            Position[j][i].status = 3; // positon for colour 3
+          else
+            Position[j][i].status = -1; // mark unreachable positions with -1
+        }
+      }
+      break;
+    case 4:
+      // set every status to -1
+      for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
+        for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
+          Position[j][i].status = -1;
+        }
+      }
+      // mark positions for shape with 0
+      Position[3][1].status = 0;
+      Position[4][1].status = 0;
+      Position[5][1].status = 0;
+      Position[6][1].status = 0;
+      Position[2][2].status = 0;
+      Position[7][2].status = 0;
+      Position[3][4].status = 0;
+      Position[6][4].status = 0;
+      break;
+
+    case 5:
+      // set every status to -1
+      for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
+        for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
+          Position[j][i].status = -1;
+        }
+      }
+      // mark positions for shape with 0
+      Position[3][3].status = 0;
+      Position[4][3].status = 0;
+      Position[5][3].status = 0;
+      Position[6][3].status = 0;
+      Position[7][3].status = 0;
+      Position[8][3].status = 0;
+      Position[7][2].status = 0;
+      Position[6][1].status = 0;
+      Position[7][4].status = 0;
+      Position[6][5].status = 0;
       break;
 
     default: //no valid mode
@@ -147,6 +196,28 @@ int ObjectCarrier::nextOccupiedPosition(int& x_pos, int& y_pos, int type = 1){
   return -1;  //no occupied position of type <type>
 }
 
+
+bool ObjectCarrier::isEmpty(){
+  for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
+    for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
+      if (Position[j][i].status > 0){
+        return false; // still objects left
+      }
+    }
+  }
+  return true; // object carrier is empty
+}
+
+bool ObjectCarrier::isFull(){
+  for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
+    for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
+      if (Position[j][i].status <= 0 && Position[j][i].status != -1){
+        return false; // still empty positions left
+      }
+    }
+  }
+  return true; // object carrier is full
+}
 
 int ObjectCarrier::getState(int x_pos, int y_pos){
   if (x_pos < 0 || x_pos >= OBJECTCARRIER_NUM_COLS || y_pos < 0 || y_pos >= OBJECTCARRIER_NUM_ROWS)
