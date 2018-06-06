@@ -29,7 +29,7 @@ public:
   int getShape();
 
   // Mode 3
-  int getTicTacToe(int& row, int& col, int& player);
+  int getTicTacToe(int& x_pos, int& y_pos, int& player);
 
 
 
