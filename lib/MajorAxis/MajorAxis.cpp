@@ -45,9 +45,9 @@ MajorAxis::MajorAxis()
 
 void MajorAxis::init()
 {
-  double a1 = angleSensor1->getRotation();
+  double a1 = getRotationMean(1);
   delay(500);
-  double a2 = angleSensor2->getRotation();
+  double a2 = getRotationMean(2);
   delay(500);
 
   if(a1 > 0 && a2 > 0)
@@ -138,25 +138,39 @@ int MajorAxis::movePosition(float X, float Y)
 
 void MajorAxis::moveToAngle(double alpha, double beta)
 {
-  double a1, a2;
+  double a1, a2, c1, c2;
+  int steps_m1, steps_m2, csteps_m1, csteps_m2;
 
+  //First Step
   a1 = calculateToGoAngle(alpha, 1);
   a2 = calculateToGoAngle(beta, 2);
-  Serial.print("toGoSteps M1: ");
-  Serial.println(a1);
-  Serial.print("toGoSteps M2: ");
-  Serial.println(a2);
-  moveLinksStep(a1/(360.0/NUMBER_EIGHTH_STEPS), a2/(360.0/NUMBER_EIGHTH_STEPS));
 
-  setMomvmentParameter(1000, 1000, 500);
+  steps_m1 = a1/(360.0/NUMBER_EIGHTH_STEPS);
+  steps_m2 = a2/(360.0/NUMBER_EIGHTH_STEPS);
 
-  a1 = calculateToGoAngle(alpha, 1);
-  a2 = calculateToGoAngle(beta, 2);
-  Serial.print("toGoSteps Correction M1: ");
-  Serial.println(a1);
-  Serial.print("toGoSteps Correction M2: ");
-  Serial.println(a2);
-  moveLinksStep(a1/(360.0/NUMBER_EIGHTH_STEPS), a2/(360.0/NUMBER_EIGHTH_STEPS));
+  moveLinksStep(steps_m1, steps_m2);
+
+  Serial.print("First-Steps M1: ");
+  Serial.println(steps_m1);
+  Serial.print("First-Steps M2: ");
+  Serial.println(steps_m2);
+
+  //Correction Step
+  delay(800);
+  setMomvmentParameter(50, 50, 50);
+
+  c1 = calculateToGoAngle(alpha, 1);
+  c2 = calculateToGoAngle(beta, 2);
+
+  csteps_m1 = c1/(360.0/NUMBER_EIGHTH_STEPS);
+  csteps_m2 = c2/(360.0/NUMBER_EIGHTH_STEPS);
+
+  moveLinksStep(csteps_m1, csteps_m2);
+
+  Serial.print("Correction-Steps M1: ");
+  Serial.println(csteps_m1);
+  Serial.print("Correction-Steps M2: ");
+  Serial.println(csteps_m2);
 
   setMomvmentParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
 }
@@ -167,7 +181,7 @@ double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
   double currentAngle;
   if(motoridx == 1)
   {
-    currentAngle = angleSensor1->getRotation();
+    currentAngle = getRotationMean(motoridx);
 
     if(((targetAngle > 0) && (currentAngle > 0)) || ((targetAngle < 0) && (currentAngle < 0)))
       toGoAngle = targetAngle - currentAngle;
@@ -181,7 +195,7 @@ double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
   }
   else if(motoridx == 2)
   {
-    currentAngle = angleSensor2->getRotation();
+    currentAngle = getRotationMean(motoridx);
 
     toGoAngle = targetAngle - currentAngle;
 
@@ -190,6 +204,33 @@ double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
   }
 
   return toGoAngle;
+}
+
+double MajorAxis::getRotationMean(int motoridx)
+{
+  double currentAngle = 0;
+  double meanRotation;
+  int loopsize = 20;
+
+  if(motoridx == 1)
+  {
+    for(int i = 0; i < loopsize; i++){
+      currentAngle = currentAngle + angleSensor1->getRotation();
+      delay(5);
+    }
+  }
+  else if(motoridx == 2)
+  {
+    for(int i = 0; i < loopsize; i++){
+      currentAngle = currentAngle + angleSensor2->getRotation();
+      delay(5);
+    }
+  }
+
+  meanRotation = currentAngle / loopsize;
+
+  return meanRotation;
+
 }
 
 void MajorAxis::moveLinksStep(int steps1, int steps2)
