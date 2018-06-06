@@ -142,12 +142,20 @@ void MajorAxis::moveToAngle(double alpha, double beta)
 
   a1 = calculateToGoAngle(alpha, 1);
   a2 = calculateToGoAngle(beta, 2);
+  Serial.print("toGoSteps M1: ");
+  Serial.println(a1);
+  Serial.print("toGoSteps M2: ");
+  Serial.println(a2);
   moveLinksStep(a1/(360.0/NUMBER_EIGHTH_STEPS), a2/(360.0/NUMBER_EIGHTH_STEPS));
 
   setMomvmentParameter(1000, 1000, 500);
 
   a1 = calculateToGoAngle(alpha, 1);
   a2 = calculateToGoAngle(beta, 2);
+  Serial.print("toGoSteps Correction M1: ");
+  Serial.println(a1);
+  Serial.print("toGoSteps Correction M2: ");
+  Serial.println(a2);
   moveLinksStep(a1/(360.0/NUMBER_EIGHTH_STEPS), a2/(360.0/NUMBER_EIGHTH_STEPS));
 
   setMomvmentParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
