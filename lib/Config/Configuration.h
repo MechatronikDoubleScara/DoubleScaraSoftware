@@ -30,8 +30,8 @@
 #define Z_SERVO_POS_DOWN 20.0
 #define Z_SERVO_CORRECTION_FACTOR 1.113 //empirical correction factor for conversion to linear movement
 
-#define SENSOR1_OFFSET 28
-#define SENSOR2_OFFSET 63
+#define SENSOR1_OFFSET 29
+#define SENSOR2_OFFSET 62.8
 
 #define STEPPER_MAXSPEED 2000
 #define STEPPER_SPEED 2000
@@ -51,8 +51,8 @@
 #define PIN_SOFTWARESERIAL_TX 17 //RX am Bluetooth
 #define PIN_ENDEFFECTOR 45
 #define PIN_ZAXIS_SERVO 13
-#define PIN_SS_SENSOR1 11
-#define PIN_SS_SENSOR2 12
+#define PIN_SS_SENSOR1 12
+#define PIN_SS_SENSOR2 11
 
 //Stepper Driver Pins -> Richtige eintragen
 #define PIN_SMD_ENABLE 14
