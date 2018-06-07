@@ -16,7 +16,7 @@ class MajorAxis
     void init();
     void setSensorOffset(float offset1, float offset2);
     void setMovementParameter(int speed, int maxspeed, int acc);
-    int movePosition(float X, float Y);
+    int movePosition(float X, float Y, bool correction = true);
     void moveToAngle(double alpha, double beta, bool correction = true);
     void printSensorValueRaw();
     void printSensorValueMean();
