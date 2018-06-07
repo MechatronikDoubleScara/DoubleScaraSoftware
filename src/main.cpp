@@ -38,6 +38,7 @@ LowerObjCarrier->setMode(OBJECTCARRIER_MAGAZINE);
 
 //zAchse->moveDown();
 
+
 }
 
 void loop() {
@@ -77,7 +78,7 @@ void loop() {
         Serial.println("error no activity transmitted");
         break;
     }
-    //delay(3000);
+    Roboter->goHome();
     Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
@@ -155,6 +156,7 @@ void loop() {
     // CODE OF MODE 2
     Serial.println("I'm in Mode 2: Shapes");
     Roboter->makeShape(LowerObjCarrier, UpperObjCarrier, Kommunikation->getShape());
+    Roboter->goHome();
     Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
@@ -169,6 +171,7 @@ void loop() {
     if (winner == PLAYER1 || winner == PLAYER2){
       Serial.println("Someone won!");
       Roboter->makeFancyDance(UpperObjCarrier);
+      Roboter->goHome();
     }
     Serial.println("Send OK\n");
     Kommunikation->print("#OK~");

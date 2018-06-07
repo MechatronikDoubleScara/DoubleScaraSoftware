@@ -36,7 +36,7 @@ public:
   int ticTacToePlace(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2, int x2_pos, int y2_pos, int player);
   int manualModeInit(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2);
   int makeFancyDance(ObjectCarrier* ObjectCarrier);
-  //int goHome();
+  int goHome();
 
 
 private:

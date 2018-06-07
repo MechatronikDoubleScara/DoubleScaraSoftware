@@ -118,8 +118,6 @@ int MajorAxis::movePosition(float X, float Y, bool correction = true)
     }
   }
 
-  delay(200);
-
   // angles for position from user input
   moveToAngle(PHI1d, PHI4d, correction);
 

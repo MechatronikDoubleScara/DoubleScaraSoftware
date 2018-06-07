@@ -181,7 +181,16 @@ int Robot::manualModeInit(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCa
 
 int Robot::makeFancyDance(ObjectCarrier* ObjectCarrier){
   Serial.println("Making fancy dance");
-  MajorAxis->setMovementParameter(STEPPER_SPEED*2, STEPPER_MAXSPEED*2, STEPPER_ACCELERATION*2);
+  MajorAxis->setMovementParameter(STEPPER_SPEED*5, STEPPER_MAXSPEED*5, STEPPER_ACCELERATION*4);
+  goHome();
+  ZAxis->moveDown();
+  delay(500);
+  ZAxis->moveUp();
+  delay(500);
+  ZAxis->moveDown();
+  delay(500);
+  ZAxis->moveUp();
+  delay(500);
   movePosition(ObjectCarrier, 3, 5, false);
   movePosition(ObjectCarrier, 0, 2, false);
   movePosition(ObjectCarrier, 0, 0, false);
@@ -189,6 +198,22 @@ int Robot::makeFancyDance(ObjectCarrier* ObjectCarrier){
   movePosition(ObjectCarrier, 11, 2,false);
   movePosition(ObjectCarrier, 8, 5, false);
   movePosition(ObjectCarrier, 3, 5, false);
+  goHome();
+  ZAxis->moveDown();
+  delay(500);
+  ZAxis->moveUp();
+  delay(500);
+  ZAxis->moveDown();
+  delay(500);
+  ZAxis->moveUp();
+  delay(500);
   MajorAxis->setMovementParameter(STEPPER_SPEED, STEPPER_MAXSPEED, STEPPER_ACCELERATION);
+  return 0;
+}
+
+int Robot::goHome(){
+  MajorAxis->init();
+  ZAxis->moveUp();
+  delay(500);
   return 0;
 }
