@@ -62,7 +62,7 @@ void MajorAxis::init()
 }
 
 // Move TCP to absolut X & Y Position
-int MajorAxis::movePosition(float X, float Y)
+int MajorAxis::movePosition(float X, float Y, bool correction = true)
 {
   calculateAngles(X, Y);
 
@@ -125,7 +125,7 @@ int MajorAxis::movePosition(float X, float Y)
   delay(400);
 
   // angles for position from user input
-  moveToAngle(PHI1d, PHI4d);
+  moveToAngle(PHI1d, PHI4d, correction);
 
   currentArea = area;
   currentPosX = X;
@@ -135,7 +135,7 @@ int MajorAxis::movePosition(float X, float Y)
 }
 
 // Move both links to an absolut angle
-void MajorAxis::moveToAngle(double alpha, double beta, bool correction = true)
+void MajorAxis::moveToAngle(double alpha, double beta, bool correction)
 {
   double a1, a2, c1, c2;
   int steps_m1, steps_m2, csteps_m1, csteps_m2;
