@@ -135,7 +135,7 @@ int MajorAxis::movePosition(float X, float Y, bool correction = true)
 }
 
 // Move both links to an absolut angle
-void MajorAxis::moveToAngle(double alpha, double beta, bool correction)
+void MajorAxis::moveToAngle(double alpha, double beta, bool correction = true)
 {
   double a1, a2, c1, c2;
   int steps_m1, steps_m2, csteps_m1, csteps_m2;
