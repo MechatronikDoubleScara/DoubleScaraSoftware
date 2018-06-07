@@ -97,14 +97,14 @@ int ObjectCarrier::setMode(int type = 0){
         }
       }
       // mark positions for shape with 0
-      Position[3][1].status = 0;
       Position[4][1].status = 0;
       Position[5][1].status = 0;
       Position[6][1].status = 0;
-      Position[2][2].status = 0;
-      Position[7][2].status = 0;
-      Position[3][4].status = 0;
-      Position[6][4].status = 0;
+      Position[7][1].status = 0;
+      Position[3][2].status = 0;
+      Position[8][2].status = 0;
+      Position[4][4].status = 0;
+      Position[7][4].status = 0;
       break;
 
     case OBJECTCARRIER_SHAPE_ARROW:
