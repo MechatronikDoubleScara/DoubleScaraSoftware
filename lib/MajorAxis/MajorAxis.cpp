@@ -135,7 +135,7 @@ int MajorAxis::movePosition(float X, float Y)
 }
 
 // Move both links to an absolut angle
-void MajorAxis::moveToAngle(double alpha, double beta)
+void MajorAxis::moveToAngle(double alpha, double beta, bool correction = true)
 {
   double a1, a2, c1, c2;
   int steps_m1, steps_m2, csteps_m1, csteps_m2;
@@ -155,23 +155,26 @@ void MajorAxis::moveToAngle(double alpha, double beta)
   Serial.println(steps_m2);
 
   //Correction Movement
-  delay(400);
-  setMovementParameter(50, 50, 50);
+  if(correction == true)
+    {
+      delay(400);
+      setMovementParameter(50, 50, 50);
 
-  c1 = calculateToGoAngle(alpha, 1);
-  c2 = calculateToGoAngle(beta, 2);
+      c1 = calculateToGoAngle(alpha, 1);
+      c2 = calculateToGoAngle(beta, 2);
 
-  csteps_m1 = c1/(360.0/NUMBER_EIGHTH_STEPS);
-  csteps_m2 = c2/(360.0/NUMBER_EIGHTH_STEPS);
+      csteps_m1 = c1/(360.0/NUMBER_EIGHTH_STEPS);
+      csteps_m2 = c2/(360.0/NUMBER_EIGHTH_STEPS);
 
-  moveLinksStep(csteps_m1, csteps_m2);
+      moveLinksStep(csteps_m1, csteps_m2);
 
-  Serial.print("Correction-Steps M1: ");
-  Serial.println(csteps_m1);
-  Serial.print("Correction-Steps M2: ");
-  Serial.println(csteps_m2);
+      Serial.print("Correction-Steps M1: ");
+      Serial.println(csteps_m1);
+      Serial.print("Correction-Steps M2: ");
+      Serial.println(csteps_m2);
 
-  setMovementParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
+      setMovementParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
+  }
 }
 
 // Calculate toGoAngle from current and goal angle
@@ -253,7 +256,7 @@ void MajorAxis::changeSide()
     moveToAngle(130, 50);
     delay(400);
     setMovementParameter(8000, 8000, 12000);
-    moveToAngle(-130, -50);
+    moveToAngle(-130, -50, false);
     delay(400);
   }
   else if(currentArea < 0)
@@ -262,7 +265,7 @@ void MajorAxis::changeSide()
     moveToAngle(-130, -50);
     delay(400);
     setMovementParameter(8000, 8000, 12000);
-    moveToAngle(130, 50);
+    moveToAngle(130, 50, false);
     delay(400);
   }
   setMovementParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
@@ -348,7 +351,6 @@ int MajorAxis::calculateAngles(double X, double Y)
       area = -1; // robot moving in bottom area
     }
   }
-
 
   if (area > 0)
   {
