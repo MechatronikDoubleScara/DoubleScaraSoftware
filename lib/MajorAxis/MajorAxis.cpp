@@ -91,14 +91,10 @@ int MajorAxis::movePosition(float X, float Y)
       moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
     }
 
-    delay(400);
-
     if((currentArea < 0 && area > 0) || (currentArea > 0 && area < 0))
     {
       changeSide();
     }
-
-    delay(400);
 
     if(area == 2)
     {
@@ -122,7 +118,7 @@ int MajorAxis::movePosition(float X, float Y)
     }
   }
 
-  delay(400);
+  delay(200);
 
   // angles for position from user input
   moveToAngle(PHI1d, PHI4d);
@@ -257,7 +253,7 @@ void MajorAxis::changeSide()
     delay(400);
     setMovementParameter(8000, 8000, 12000);
     moveToAngle(-130, -50, false);
-    delay(400);
+    delay(200);
   }
   else if(currentArea < 0)
   {
@@ -266,7 +262,7 @@ void MajorAxis::changeSide()
     delay(400);
     setMovementParameter(8000, 8000, 12000);
     moveToAngle(130, 50, false);
-    delay(400);
+    delay(200);
   }
   setMovementParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
 }
