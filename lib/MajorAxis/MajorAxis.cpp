@@ -309,13 +309,11 @@ void MajorAxis::printSensorValueMean()
   delay(500);
 }
 
-double MajorAxis::getAngle1()
-{
+double MajorAxis::getAngle1(){
   return PHI1d;
 }
 
-double MajorAxis::getAngle4()
-{
+double MajorAxis::getAngle4(){
   return PHI4d;
 }
 
@@ -326,35 +324,27 @@ int MajorAxis::calculateAngles(double X, double Y)
   Serial.print(" and Y = ");
   Serial.println(Y);
 
-  if (Y >= 0.00)
-  {
+  if (Y >= 0.00){
 
-    if(X < 0 && Y < 56)
-    {
+    if(X < 0 && Y < 56){
       area = 2; // robot moving in top left area
     }
-    else if(X > 0 && Y < 56)
-    {
+    else if(X > 0 && Y < 56){
       area = 3; // robot moving in top right area
     }
-    else
-    {
+    else{
       area = 1; // robot moving in top area
     }
 
   }
-  else
-  {
-    if(X < 0 && Y > -56)
-    {
+  else{
+    if(X < 0 && Y > -56){
       area = -2; // robot moving in bottom left area
     }
-    else if(X > 0 && Y > -56)
-    {
+    else if(X > 0 && Y > -56){
       area = -3; // robot moving in bottom right area
     }
-    else
-    {
+    else{
       area = -1; // robot moving in bottom area
     }
   }
@@ -372,20 +362,18 @@ int MajorAxis::calculateAngles(double X, double Y)
     PHI1        = alpha1 + alpha2;
 
     // norm to 0 ... 360
-    if(PHI1 >= 2*PI)
-    {
+    if(PHI1 >= 2*PI){
       PHI1 = PHI1 - 2*PI;
     }
-    else if (PHI1 < 0)
-    {
+    else if (PHI1 < 0){
       PHI1 = PHI1 + 2*PI;
     }
 
     // scale to 0 ... 180, -180 ... 0
-    if (PHI1 > PI)
-    {
+    if (PHI1 > PI){
       PHI1 = PHI1 - 2*PI;
     }
+
     PHI1d       = PHI1 * 360/(2*PI);
 
     beta2       = atan2(Y, BASE_LENGTH/2 - X);
@@ -393,20 +381,18 @@ int MajorAxis::calculateAngles(double X, double Y)
     PHI4        = PI - beta2 - beta1;
 
     // norm to 0 ... 360
-    if(PHI4 >= 2*PI)
-    {
+    if(PHI4 >= 2*PI){
       PHI4 = PHI4 - 2*PI;
     }
-    else if (PHI4 < 0)
-    {
+    else if (PHI4 < 0){
       PHI4 = PHI4 + 2*PI;
     }
 
     // scale to 0 ... 180, -180 ... 0
-    if (PHI4 > PI)
-    {
+    if (PHI4 > PI){
       PHI4 = PHI4 - 2*PI;
     }
+
     PHI4d       = PHI4 * 360/(2*PI);
   }
   else if(area < 0)
@@ -421,20 +407,18 @@ int MajorAxis::calculateAngles(double X, double Y)
     PHI1        = 2*PI - alpha1 - alpha2;
 
     // norm to 0 ... 360
-    if(PHI1 >= 2*PI)
-    {
+    if(PHI1 >= 2*PI){
       PHI1 = PHI1 - 2*PI;
     }
-    else if (PHI1 < 0)
-    {
+    else if (PHI1 < 0){
       PHI1 = PHI1 + 2*PI;
     }
 
     // scale to 0 ... 180, -180 ... 0
-    if (PHI1 > PI)
-    {
+    if (PHI1 > PI){
       PHI1 = PHI1 - 2*PI;
     }
+
     PHI1d       = PHI1 * 360/(2*PI);
 
     beta2       = atan2(-Y, BASE_LENGTH/2 - X);
@@ -443,24 +427,20 @@ int MajorAxis::calculateAngles(double X, double Y)
     PHI4        = PI + beta2 + beta1;
 
     // norm to 0 ... 360
-    if(PHI4 >= 2*PI)
-    {
+    if(PHI4 >= 2*PI){
       PHI4 = PHI4 - 2*PI;
     }
-    else if (PHI4 < 0)
-    {
+    else if (PHI4 < 0){
       PHI4 = PHI4 + 2*PI;
     }
 
     // scale to 0 ... 180, -180 ... 0
-    if (PHI4 > PI)
-    {
+    if (PHI4 > PI){
       PHI4 = PHI4 - 2*PI;
     }
     PHI4d       = PHI4 * 360/(2*PI);
   }
-  else
-  {
+  else{
     return -1;
   }
 
