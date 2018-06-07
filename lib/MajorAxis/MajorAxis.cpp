@@ -14,9 +14,6 @@ MajorAxis::MajorAxis()
   PHI4d = 0;
   area = 0;
 
-  //pinMode(PIN_SMD_ENABLE, OUTPUT);
-  //digitalWrite(PIN_SMD_ENABLE, HIGH);
-
   //Sensor initialization
   angleSensor1 = new AS5048A(PIN_SS_SENSOR1);
   angleSensor2 = new AS5048A(PIN_SS_SENSOR2);
@@ -46,9 +43,9 @@ MajorAxis::MajorAxis()
 void MajorAxis::init()
 {
   double a1 = getRotationMean(1);
-  delay(500);
+  //delay(400);
   double a2 = getRotationMean(2);
-  delay(500);
+  delay(400);
 
   if(a1 > 0 && a2 > 0)
   {
@@ -64,6 +61,7 @@ void MajorAxis::init()
     Serial.println("Error");
 }
 
+// Move TCP to absolut X & Y Position
 int MajorAxis::movePosition(float X, float Y)
 {
   calculateAngles(X, Y);
@@ -93,14 +91,14 @@ int MajorAxis::movePosition(float X, float Y)
       moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
     }
 
-    delay(500);
+    delay(400);
 
     if((currentArea < 0 && area > 0) || (currentArea > 0 && area < 0))
     {
       changeSide();
     }
 
-    delay(500);
+    delay(400);
 
     if(area == 2)
     {
@@ -124,7 +122,7 @@ int MajorAxis::movePosition(float X, float Y)
     }
   }
 
-  delay(500);
+  delay(400);
 
   // angles for position from user input
   moveToAngle(PHI1d, PHI4d);
@@ -136,12 +134,13 @@ int MajorAxis::movePosition(float X, float Y)
   return 0;
 }
 
+// Move both links to an absolut angle
 void MajorAxis::moveToAngle(double alpha, double beta)
 {
   double a1, a2, c1, c2;
   int steps_m1, steps_m2, csteps_m1, csteps_m2;
 
-  //First Step
+  //First Movement
   a1 = calculateToGoAngle(alpha, 1);
   a2 = calculateToGoAngle(beta, 2);
 
@@ -155,9 +154,9 @@ void MajorAxis::moveToAngle(double alpha, double beta)
   Serial.print("First-Steps M2: ");
   Serial.println(steps_m2);
 
-  //Correction Step
-  delay(800);
-  setMomvmentParameter(50, 50, 50);
+  //Correction Movement
+  delay(400);
+  setMovementParameter(50, 50, 50);
 
   c1 = calculateToGoAngle(alpha, 1);
   c2 = calculateToGoAngle(beta, 2);
@@ -172,9 +171,10 @@ void MajorAxis::moveToAngle(double alpha, double beta)
   Serial.print("Correction-Steps M2: ");
   Serial.println(csteps_m2);
 
-  setMomvmentParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
+  setMovementParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
 }
 
+// Calculate toGoAngle from current and goal angle
 double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
 {
   double toGoAngle;
@@ -206,6 +206,7 @@ double MajorAxis::calculateToGoAngle(double targetAngle, int motoridx)
   return toGoAngle;
 }
 
+// Loop over some sensor measurments and get mean value
 double MajorAxis::getRotationMean(int motoridx)
 {
   double currentAngle = 0;
@@ -228,14 +229,12 @@ double MajorAxis::getRotationMean(int motoridx)
   }
 
   meanRotation = currentAngle / loopsize;
-
   return meanRotation;
-
 }
 
+// Move both links a specific amount of steps
 void MajorAxis::moveLinksStep(int steps1, int steps2)
 {
-  //digitalWrite(PIN_SMD_ENABLE, LOW);
   stepper1->move(steps1);
   stepper2->move(steps2);
   while((stepper1->distanceToGo()!=0) || (stepper2->distanceToGo()!=0))
@@ -243,33 +242,34 @@ void MajorAxis::moveLinksStep(int steps1, int steps2)
     stepper1->run();
     stepper2->run();
   }
-  //digitalWrite(PIN_SMD_ENABLE, HIGH);
 }
 
+// Routine for changing side. Positive <-> Negative side
 void MajorAxis::changeSide()
 {
   if(currentArea > 0)
   {
-    delay(500);
+    delay(400);
     moveToAngle(130, 50);
-    delay(500);
-    setMomvmentParameter(8000, 8000, 12000);
+    delay(400);
+    setMovementParameter(8000, 8000, 12000);
     moveToAngle(-130, -50);
-    delay(500);
+    delay(400);
   }
   else if(currentArea < 0)
   {
-    delay(500);
+    delay(400);
     moveToAngle(-130, -50);
-    delay(500);
-    setMomvmentParameter(8000, 8000, 12000);
+    delay(400);
+    setMovementParameter(8000, 8000, 12000);
     moveToAngle(130, 50);
-    delay(500);
+    delay(400);
   }
-  setMomvmentParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
+  setMovementParameter(STEPPER_MAXSPEED, STEPPER_SPEED, STEPPER_ACCELERATION);
 }
 
-void MajorAxis::setZeroPositionLinks(float offset1, float offset2)
+// Set offset value for both rotation sensors
+void MajorAxis::setSensorOffset(float offset1, float offset2)
 {
   sensor_offset1 = offset1;
   sensor_offset2 = offset2;
@@ -278,7 +278,8 @@ void MajorAxis::setZeroPositionLinks(float offset1, float offset2)
   angleSensor2->setZeroPosition(offset2);
 }
 
-void MajorAxis::setMomvmentParameter(int speed, int maxspeed, int acc)
+// Set movment parameters for both motors. Speed, Maxspeed & Acceleration
+void MajorAxis::setMovementParameter(int speed, int maxspeed, int acc)
 {
   stepper1->setMaxSpeed(maxspeed);
   stepper1->setSpeed(speed);
@@ -288,12 +289,23 @@ void MajorAxis::setMomvmentParameter(int speed, int maxspeed, int acc)
   stepper2->setAcceleration(acc);
 }
 
-void MajorAxis::printSensorValue()
+// Print raw sensorvalues
+void MajorAxis::printSensorValueRaw()
 {
   Serial.print("Sensor1:");
   Serial.println(angleSensor1->getRotation());
   Serial.print("Sensor2:");
   Serial.println(angleSensor2->getRotation());
+  delay(500);
+}
+
+// Print mean sensorvalues
+void MajorAxis::printSensorValueMean()
+{
+  Serial.print("Sensor1:");
+  Serial.println(getRotationMean(1));
+  Serial.print("Sensor2:");
+  Serial.println(getRotationMean(2));
   delay(500);
 }
 
@@ -346,7 +358,6 @@ int MajorAxis::calculateAngles(double X, double Y)
       area = -1; // robot moving in bottom area
     }
   }
-
 
 
   if (area > 0)

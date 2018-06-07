@@ -14,11 +14,12 @@ class MajorAxis
   public:
     MajorAxis();
     void init();
-    void setZeroPositionLinks(float offset1, float offset2);
-    void setMomvmentParameter(int speed, int maxspeed, int acc);
+    void setSensorOffset(float offset1, float offset2);
+    void setMovementParameter(int speed, int maxspeed, int acc);
     int movePosition(float X, float Y);
     void moveToAngle(double alpha, double beta);
-    void printSensorValue();
+    void printSensorValueRaw();
+    void printSensorValueMean();
     double getRotationMean(int motoridx);
 
     int calculateAngles(double X, double Y); // returns 1 if position is inside work space, -1 if outside workspace, -2 if position is in safety area
