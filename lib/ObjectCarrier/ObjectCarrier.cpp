@@ -57,10 +57,10 @@ int ObjectCarrier::setMode(int type = 0){
     case OBJECTCARRIER_TICTACTOE: // Object carrier for TicTacToe; 3x3 positions allowed (empty)
       for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
         for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
-          if (j > 2 || i > 2)
-            Position[j][i].status = -1; // mark unreachable positions with -1
+          if (j >=3 && j <=5 && i >= 3 && i <= 5)
+            Position[j][i].status = 0; // mark possible position with 0
           else
-             Position[j][i].status = 0; // all others with 0
+             Position[j][i].status = -1; // mark unreachable positions with -1
         }
       }
       break;

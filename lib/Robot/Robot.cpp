@@ -1,18 +1,36 @@
 #include <Robot.h>
 
-int Robot::movePosition(ObjectCarrier* ObjectCarrier, int x_pos, int y_pos){
+int Robot::movePosition(ObjectCarrier* ObjectCarrier, int x_pos, int y_pos, bool correction = true){
   float x_coord = ObjectCarrier->getCoordX(x_pos, y_pos);
   float y_coord = ObjectCarrier->getCoordY(x_pos, y_pos);
 
   if (abs(x_coord) < 1 || abs(y_coord) < 1 ){
     return -1;
   }
-  MajorAxis->movePosition(x_coord, y_coord);
+  MajorAxis->movePosition(x_coord, y_coord, correction);
   return 0;
 }
 
 
 int Robot::movePart(ObjectCarrier* ObjectCarrier1, int x1_pos, int y1_pos, ObjectCarrier* ObjectCarrier2, int x2_pos, int y2_pos, int lockType=0){
+
+  if(ObjectCarrier1->getState(x1_pos, y1_pos) == -1){
+    Serial.println("Error: can not move part (Pos1 not allowed)");
+    return -1;
+  }
+  else if(ObjectCarrier2->getState(x2_pos, y2_pos) == -1){
+    Serial.println("Error: can not move part (Pos2 not allowed)");
+    return -1;
+  }
+  else if (ObjectCarrier1->getState(x1_pos, y1_pos) <= 0){
+    Serial.println("Error: can not move part (no part at Pos1)");
+    return -2;
+  }
+  else if (ObjectCarrier2->getState(x2_pos, y2_pos) > 0){
+    Serial.println("Error: can not move part (Pos2 allready occupied)");
+    return -3;
+  }
+
 
   float x1_coord = ObjectCarrier1->getCoordX(x1_pos, y1_pos);
   float y1_coord = ObjectCarrier1->getCoordY(x1_pos, y1_pos);
@@ -27,7 +45,7 @@ int Robot::movePart(ObjectCarrier* ObjectCarrier1, int x1_pos, int y1_pos, Objec
 
   MajorAxis->movePosition(x1_coord, y1_coord);
   ZAxis->moveDown();
-  delay(750);
+  delay(1000);
   Endeffector->setState(true);
   delay(250);
   ZAxis->moveUp();
@@ -59,7 +77,7 @@ int Robot::cleanPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrie
           Serial.print("Error: unable to clean plate (no free place left)\n");
           return -1;
         }
-        movePart(ObjectCarrier1, x1_pos, y1_pos, ObjectCarrier2, x2_pos, y2_pos, 1);
+        movePart(ObjectCarrier1, x1_pos, y1_pos, ObjectCarrier2, x2_pos, y2_pos, 0);
       }
   }
   if (ObjectCarrier1->isEmpty()){
@@ -146,7 +164,7 @@ int Robot::ticTacToePlace(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCa
     Serial.println("Error: unable to place part (no parts of required type)");
     return -1;
   }
-  int success = movePart(ObjectCarrier1, x1_pos, y1_pos, ObjectCarrier2, x2_pos, y2_pos, 1);
+  int success = movePart(ObjectCarrier1, x1_pos, y1_pos, ObjectCarrier2, x2_pos + TICTACTOE_OFFSET_X, y2_pos + TICTACTOE_OFFSET_Y, 1);
   if(success == 0){
     Serial.println("Successfuly placed part");
   }
@@ -158,5 +176,19 @@ int Robot::manualModeInit(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCa
   Serial.println("Object carrier MAGAZINE loded");
   ObjectCarrier2->setMode(OBJECTCARRIER_STD);
   Serial.println("Object carrier STANDARD loaded");
+  return 0;
+}
+
+int Robot::makeFancyDance(ObjectCarrier* ObjectCarrier){
+  Serial.println("Making fancy dance");
+  MajorAxis->setMovementParameter(STEPPER_SPEED*2, STEPPER_MAXSPEED*2, STEPPER_ACCELERATION*2);
+  movePosition(ObjectCarrier, 3, 5, false);
+  movePosition(ObjectCarrier, 0, 2, false);
+  movePosition(ObjectCarrier, 0, 0, false);
+  movePosition(ObjectCarrier, 11, 0,false);
+  movePosition(ObjectCarrier, 11, 2,false);
+  movePosition(ObjectCarrier, 8, 5, false);
+  movePosition(ObjectCarrier, 3, 5, false);
+  MajorAxis->setMovementParameter(STEPPER_SPEED, STEPPER_MAXSPEED, STEPPER_ACCELERATION);
   return 0;
 }

@@ -50,12 +50,12 @@ void MajorAxis::init()
   if(a1 > 0 && a2 > 0)
   {
     currentArea = 1;
-    moveToAngle(150, 30);
+    moveToAngle(150, 30, false);
   }
   else if(a1 < 0 && a2 < 0)
   {
     currentArea = -1;
-    moveToAngle(-150, -30);
+    moveToAngle(-150, -30, false);
   }
   else
     Serial.println("Error");
@@ -73,22 +73,22 @@ int MajorAxis::movePosition(float X, float Y, bool correction = true)
     if(currentArea == 2)
     {
       // SAFE Position 2
-      moveToAngle(-144.3, 127.2); // angles for Position (X: -115, Y: 70)
+      moveToAngle(-144.3, 127.2, false); // angles for Position (X: -115, Y: 70)
     }
     else if (currentArea == 3)
     {
       // SAFE Position 3
-      moveToAngle(52.8, -35.7); // angles for Position (X: 115, Y: 70)
+      moveToAngle(52.8, -35.7, false); // angles for Position (X: 115, Y: 70)
     }
     else if (currentArea == -2)
     {
       // SAFE Position -2
-      moveToAngle(144.3, -127.2); // angles for Position (X: -115, Y: -70)
+      moveToAngle(144.3, -127.2, false); // angles for Position (X: -115, Y: -70)
     }
     else if (currentArea == -3)
     {
       // SAFE Position -3
-      moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
+      moveToAngle(-52.8, 35.7, false); // angles for Position (X: 115, Y: -70)
     }
 
     if((currentArea < 0 && area > 0) || (currentArea > 0 && area < 0))
@@ -99,22 +99,22 @@ int MajorAxis::movePosition(float X, float Y, bool correction = true)
     if(area == 2)
     {
       // SAFE Position 2
-      moveToAngle(-144.3, 127.2); // angles for Position (X: -115, Y: 60)
+      moveToAngle(-144.3, 127.2, false); // angles for Position (X: -115, Y: 60)
     }
     else if (area == 3)
     {
       // SAFE Position 3
-      moveToAngle(52.8, -35.7); // angles for Position (X: 115, Y: 70)
+      moveToAngle(52.8, -35.7, false); // angles for Position (X: 115, Y: 70)
     }
     else if (area == -2)
     {
       // SAFE Position -2
-      moveToAngle(144.3, -127.2); // angles for Position (X: -115, Y: -70)
+      moveToAngle(144.3, -127.2, false); // angles for Position (X: -115, Y: -70)
     }
     else if (area == -3)
     {
       // SAFE Position -3
-      moveToAngle(-52.8, 35.7); // angles for Position (X: 115, Y: -70)
+      moveToAngle(-52.8, 35.7, false); // angles for Position (X: 115, Y: -70)
     }
   }
 

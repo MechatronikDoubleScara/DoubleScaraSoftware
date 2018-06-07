@@ -29,7 +29,7 @@ public:
   int getShape();
 
   // Mode 3
-  int getTicTacToe(int& x_pos, int& y_pos, int& player);
+  int getTicTacToe(int& x_pos, int& y_pos, int& player, int& winner);
 
 
 
@@ -57,6 +57,7 @@ private:
 
   // Variables for mode 3 (TicTacToe)
   int player;
+  int winner;
   int row;
   int col;
 

@@ -12,11 +12,13 @@ void Communication::init()
   Y = 0.0;
   Z = 0.0;
   magnet = 0;
-  // Initialise variables MODE 1
-
-  // Initialise variables MODE 1
-
-
+  // Initialise variables MODE 2
+  shape = 0;
+  // Initialise variables MODE 3
+  player = 0;
+  winner = 0;
+  row = 0;
+  col = 0;
   // Initialise serial communications
   Serial.begin(9600);
   Serial.println("New Session started!");
@@ -125,8 +127,9 @@ void Communication::recieve()
     {
       // EXTRACT FROM MESSAGE FOR MODE 3
       player  = data[1].toInt();
-      row     = data[2].toInt();
-      col     = data[3].toInt();
+      winner  = data[2].toInt();
+      row     = data[3].toInt();
+      col     = data[4].toInt();
 
       Serial.print("Player: ");
       Serial.println(player);
@@ -186,10 +189,11 @@ int Communication::getShape()
   return shape;
 }
 
-int Communication::getTicTacToe(int& x_pos, int& y_pos, int& player)
+int Communication::getTicTacToe(int& x_pos, int& y_pos, int& player, int& winner)
 {
-  x_pos = row;
-  y_pos = col;
+  x_pos = col;
+  y_pos = row;
   player = Communication::player;
+  winner = Communication::winner;
   return 0;
 }

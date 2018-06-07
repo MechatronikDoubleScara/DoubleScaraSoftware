@@ -69,6 +69,7 @@ void loop() {
       case 3:
         // In Activity 3 clear Build Plate
         Serial.println("In Activity 3 clear Build Plate");
+        Serial.print("\n");
         Roboter->cleanPlate(UpperObjCarrier, LowerObjCarrier);
         Roboter->ticTacToeInit(LowerObjCarrier, UpperObjCarrier);
         break;
@@ -162,9 +163,13 @@ void loop() {
   {
     // CODE OF MODE 3
     Serial.println("I'm in Mode 3: TicTacToe");
-    int x2_pos, y2_pos, player;
-    Kommunikation->getTicTacToe(x2_pos, y2_pos, player);
+    int x2_pos, y2_pos, player, winner;
+    Kommunikation->getTicTacToe(x2_pos, y2_pos, player, winner);
     Roboter->ticTacToePlace(LowerObjCarrier, UpperObjCarrier, x2_pos, y2_pos, player);
+    if (winner == PLAYER1 || winner == PLAYER2){
+      Serial.println("Someone won!");
+      Roboter->makeFancyDance(UpperObjCarrier);
+    }
     Serial.println("Send OK\n");
     Kommunikation->print("#OK~");
     Kommunikation->resetRecievedData();
