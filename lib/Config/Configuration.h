@@ -27,7 +27,7 @@
 
 #define Z_SERVO_SPEED 80 // defines the speed of the servo motor for z lift (0-255)
 #define Z_SERVO_POS_UP 0.0 // defines default up and down position for move Up/Down instructions in millimeters (0-21,5)
-#define Z_SERVO_POS_DOWN 15.0
+#define Z_SERVO_POS_DOWN 18
 #define Z_SERVO_CORRECTION_FACTOR 1.113 //empirical correction factor for conversion to linear movement
 
 #define SENSOR1_OFFSET 30.14 //32.25 // -147.75 + 180

@@ -55,7 +55,7 @@ int Robot::movePart(ObjectCarrier* ObjectCarrier1, int x1_pos, int y1_pos, Objec
 
   MajorAxis->movePosition(x2_coord, y2_coord);
   ZAxis->moveDown();
-  delay(500);
+  delay(750);
   Endeffector->setState(false);
   delay(250);
   ZAxis->moveUp();
@@ -115,7 +115,7 @@ int Robot::fillPlate(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier
 int Robot::makeShape(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier2, int shape){
   switch(shape){
     case SHAPE_ARROW:
-      ObjectCarrier2->setMode(OBJECTCARRIER_SHAPE_ARROW);
+      ObjectCarrier2->setMode(OBJECTCARRIER_TICTACTOE);
       Serial.println("Object carrier SHAPE_ARROW loded");
       break;
     case SHAPE_SMILEY:
@@ -127,8 +127,8 @@ int Robot::makeShape(ObjectCarrier* ObjectCarrier1, ObjectCarrier* ObjectCarrier
       return -1;
       break;
   }
-  ObjectCarrier1->setMode(OBJECTCARRIER_MAGAZINE);
-  Serial.println("Object carrier MAGAZINE loded");
+  ObjectCarrier1->setMode(OBJECTCARRIER_MAGAZINE_COLOUR);
+  Serial.println("Object carrier MAGAZINE_COLOUR loded");
 
   int success = fillPlate(ObjectCarrier1, ObjectCarrier2);
   if(success == 0){

@@ -10,6 +10,9 @@
 #define OBJECTCARRIER_NUM_COLS  12  // Number of maximum colums in Object carrier (x-direction)
 #define OBJECTCARRIER_NUM_MAX_TYPES 5 // Number of allowed different types/colours
 
+#define OBJECTCARRIER_CORRECTION_X_LOWER 1 // Correction for lower Object Carrier only 
+#define OBJECTCARRIER_CORRECTION_Y_LOWER 2
+
 // for initialisation of positon coordinates
 // use with constructor for parameter <position_oc>
 #define OBJECTCARRIER_UPPER     0   // relative positon of object carrier on +y side
@@ -23,6 +26,7 @@
 #define OBJECTCARRIER_MAGAZINE_COLOUR  3  // Magazine Object carrier for two colours; 4x4 for each colour
 #define OBJECTCARRIER_SHAPE_SMILEY  4 //virtual object carrier for shape smiley
 #define OBJECTCARRIER_SHAPE_ARROW  5  //virtual object carrier for shape arrow
+#define OBJECTCARRIER_MAGAZINE_COLOUR_EMPTY 6
 
 class ObjPosition
 {

@@ -12,8 +12,8 @@ ObjectCarrier::ObjectCarrier(int position_oc){
     inc = OBJECTCARRIER_INCREMENT;
   }
   else if (position_oc == 1){
-    origin_x = +OBJECTCARRIER_OFFSET_X;
-    origin_y = -OBJECTCARRIER_OFFSET_Y;
+    origin_x = +OBJECTCARRIER_OFFSET_X+OBJECTCARRIER_CORRECTION_X_LOWER;
+    origin_y = -OBJECTCARRIER_OFFSET_Y-OBJECTCARRIER_CORRECTION_Y_LOWER;
     inc = -OBJECTCARRIER_INCREMENT;
   }
   else{
@@ -96,15 +96,15 @@ int ObjectCarrier::setMode(int type = 0){
           Position[j][i].status = -1;
         }
       }
-      // mark positions for shape with 0
-      Position[4][1].status = 0;
-      Position[5][1].status = 0;
-      Position[6][1].status = 0;
-      Position[7][1].status = 0;
-      Position[3][2].status = 0;
-      Position[8][2].status = 0;
-      Position[4][4].status = 0;
-      Position[7][4].status = 0;
+      // mark positions for shape
+      Position[4][1].status = -2;
+      Position[5][1].status = -2;
+      Position[6][1].status = -2;
+      Position[7][1].status = -2;
+      Position[3][2].status = -2;
+      Position[8][2].status = -2;
+      Position[4][4].status = -3;
+      Position[7][4].status = -3;
       break;
 
     case OBJECTCARRIER_SHAPE_ARROW:
@@ -114,18 +114,30 @@ int ObjectCarrier::setMode(int type = 0){
           Position[j][i].status = -1;
         }
       }
-      // mark positions for shape with 0
-      Position[3][3].status = 0;
-      Position[4][3].status = 0;
-      Position[5][3].status = 0;
-      Position[6][3].status = 0;
-      Position[7][3].status = 0;
-      Position[8][3].status = 0;
-      Position[7][2].status = 0;
-      Position[6][1].status = 0;
-      Position[7][4].status = 0;
-      Position[6][5].status = 0;
+      // mark positions for shape
+      Position[3][3].status = -2;
+      Position[4][3].status = -2;
+      Position[5][3].status = -2;
+      Position[6][3].status = -2;
+      Position[7][3].status = -2;
+      Position[8][3].status = -2;
+      Position[7][2].status = -2;
+      Position[6][1].status = -2;
+      Position[7][4].status = -2;
+      Position[6][5].status = -2;
       break;
+      case OBJECTCARRIER_MAGAZINE_COLOUR_EMPTY: // Magazine Object carrier for two colours; 4x4 for each colour (empty)
+        for (int i=0; i < OBJECTCARRIER_NUM_ROWS; i++){
+          for (int j=0; j < OBJECTCARRIER_NUM_COLS; j++){
+            if (j > 1 && j <= 5 && i > 0 && i <= 4 )
+              Position[j][i].status = -2; // positon colour 2
+            else if (j > 5 && j <= 9 && i > 0 && i <= 4 )
+              Position[j][i].status = -3; // positon colour 3
+            else
+              Position[j][i].status = -1; // mark unreachable positions with -1
+          }
+        }
+        break;
 
     default: //no valid mode
       return -1;

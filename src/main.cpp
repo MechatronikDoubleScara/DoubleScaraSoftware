@@ -98,7 +98,7 @@ void loop() {
       {
         zAchse->moveUp();
         lastZ = 0;
-        delay(200);
+        delay(300);
         Serial.println("Make XY Move");
         Achsen->movePosition(Kommunikation->getCoordinate('X'),Kommunikation->getCoordinate('Y'));
       }
@@ -108,7 +108,7 @@ void loop() {
         Serial.println("Make Z Move");
         zAchse->movePosition(Kommunikation->getCoordinate('Z'));
       }
-      delay(200);
+      delay(300);
       if(lastMagnet != Kommunikation->getMagnet())
       {
         Serial.println("Make Magnet Change");
